@@ -11,6 +11,29 @@ router = APIRouter(prefix="/phonesoftware/auth", tags=["PhoneSoftware Auth"])
 
 
 @router.post("/login", response_model=PSTokenResponse)
+from fastapi import Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import jwt as pyjwt
+
+_bearer = HTTPBearer(auto_error=False)
+
+async def get_ps_current_user(credentials: HTTPAuthorizationCredentials = Depends(_bearer)):
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Token mungon")
+    try:
+        secret = os.environ.get("JWT_SECRET", "phonesoftware_secret_2024")
+        payload = pyjwt.decode(credentials.credentials, secret, algorithms=["HS256"])
+        user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Token invalid")
+        user = await ps_users.find_one({"id": user_id}, {"_id": 0})
+        if not user:
+            raise HTTPException(status_code=401, detail="Perdoruesi nuk u gjet")
+        return user
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Token invalid: {str(e)}")
+
+
 async def ps_login(request: PSLoginRequest):
     """Login to PhoneSoftware"""
     import database as db_module

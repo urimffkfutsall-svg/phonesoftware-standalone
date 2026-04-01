@@ -9,7 +9,8 @@ from .models import (
     PSTenantCreate, PSTenantUpdate, PSTenantResponse,
     PSUserCreate, PSUserResponse, PSUserRole, PSTenantStatus
 )
-from auth import hash_password, get_current_user, log_audit
+from auth import hash_password, log_audit
+from .auth import get_ps_current_user
 
 router = APIRouter(prefix="/phonesoftware/tenants", tags=["PhoneSoftware Tenants"])
 
@@ -21,7 +22,7 @@ def check_super_admin(current_user: dict):
 
 
 @router.get("", response_model=List[PSTenantResponse])
-async def get_all_ps_tenants(current_user: dict = Depends(get_current_user)):
+async def get_all_ps_tenants(current_user: dict = Depends(get_ps_current_user)):
     """Get all PhoneSoftware tenants - Super Admin only"""
     check_super_admin(current_user)
     
@@ -35,7 +36,7 @@ async def get_all_ps_tenants(current_user: dict = Depends(get_current_user)):
 
 
 @router.post("", response_model=PSTenantResponse)
-async def create_ps_tenant(tenant: PSTenantCreate, current_user: dict = Depends(get_current_user)):
+async def create_ps_tenant(tenant: PSTenantCreate, current_user: dict = Depends(get_ps_current_user)):
     """Create a new PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -91,7 +92,7 @@ async def create_ps_tenant(tenant: PSTenantCreate, current_user: dict = Depends(
 
 
 @router.get("/{tenant_id}", response_model=PSTenantResponse)
-async def get_ps_tenant(tenant_id: str, current_user: dict = Depends(get_current_user)):
+async def get_ps_tenant(tenant_id: str, current_user: dict = Depends(get_ps_current_user)):
     """Get PhoneSoftware tenant details - Super Admin only"""
     check_super_admin(current_user)
     
@@ -106,7 +107,7 @@ async def get_ps_tenant(tenant_id: str, current_user: dict = Depends(get_current
 
 
 @router.put("/{tenant_id}", response_model=PSTenantResponse)
-async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, current_user: dict = Depends(get_current_user)):
+async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, current_user: dict = Depends(get_ps_current_user)):
     """Update PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -129,7 +130,7 @@ async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, current_user:
 
 
 @router.delete("/{tenant_id}")
-async def delete_ps_tenant(tenant_id: str, current_user: dict = Depends(get_current_user)):
+async def delete_ps_tenant(tenant_id: str, current_user: dict = Depends(get_ps_current_user)):
     """Delete PhoneSoftware tenant and all data - Super Admin only"""
     check_super_admin(current_user)
     
@@ -156,7 +157,7 @@ async def delete_ps_tenant(tenant_id: str, current_user: dict = Depends(get_curr
 
 # ============ USER MANAGEMENT ============
 @router.get("/{tenant_id}/users", response_model=List[PSUserResponse])
-async def get_ps_tenant_users(tenant_id: str, current_user: dict = Depends(get_current_user)):
+async def get_ps_tenant_users(tenant_id: str, current_user: dict = Depends(get_ps_current_user)):
     """Get all users for a PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -169,7 +170,7 @@ async def get_ps_tenant_users(tenant_id: str, current_user: dict = Depends(get_c
 
 
 @router.post("/{tenant_id}/users", response_model=PSUserResponse)
-async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, current_user: dict = Depends(get_current_user)):
+async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, current_user: dict = Depends(get_ps_current_user)):
     """Create a new user for a PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -208,7 +209,7 @@ async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, current
 
 
 @router.delete("/{tenant_id}/users/{user_id}")
-async def delete_ps_tenant_user(tenant_id: str, user_id: str, current_user: dict = Depends(get_current_user)):
+async def delete_ps_tenant_user(tenant_id: str, user_id: str, current_user: dict = Depends(get_ps_current_user)):
     """Delete a user from a PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
