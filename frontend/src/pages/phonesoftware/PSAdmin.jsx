@@ -274,7 +274,19 @@ const PSAdmin = () => {
     }
   };
 
-  const handleDelete = async (tenantId) => {
+  const handleAdminVerify = async (tenantId) => {
+  try {
+    await axios.post(${API_URL}/api/phonesoftware/auth/admin/tenants//verify, {}, {
+      headers: getAuthHeaders()
+    });
+    toast.success('Firma u verifikua nga administratori!');
+    loadTenants();
+  } catch (error) {
+    toast.error('Gabim gjate verifikimit');
+  }
+};
+
+const handleDelete = async (tenantId) => {
     if (!window.confirm('Jeni i sigurt? Kjo do të fshijë firmën dhe TË GJITHA të dhënat e saj!')) return;
     if (!window.confirm('KUJDES: Ky veprim NUK mund të kthehet! Konfirmoni përsëri.')) return;
     

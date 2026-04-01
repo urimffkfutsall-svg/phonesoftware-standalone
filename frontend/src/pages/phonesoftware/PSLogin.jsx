@@ -78,7 +78,7 @@ const PSLogin = () => {
               <Smartphone className="h-10 w-10 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900">PhoneSoftware</h1>
-            <p className="text-sm text-gray-500 mt-1">Mobile Repair & Shop Management</p>
+            <p className="text-sm text-gray-500 mt-1">Aplikacion per menaxhimin e Mobileshop</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -146,18 +146,16 @@ const PSLogin = () => {
               )}
             </Button>
           </form>
-
-          {/* Back to home link */}
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-            <a
-              href="/"
-              className="text-gray-500 hover:text-[#00a79d] text-sm transition-colors"
-            >
-              ← Kthehu në faqen kryesore
-            </a>
+            <p className="text-sm text-gray-500">
+              Nuk keni llogari?{' '}
+              <a href="/phonesoftware/register" className="text-[#00a79d] font-semibold hover:underline">
+                Regjistrohuni ketu
+              </a>
+            </p>
           </div>
-        </div>
-      </div>
+
+          </div></div>
 
       {/* Subscription Expired Modal */}
       <Dialog open={showExpiredModal} onOpenChange={setShowExpiredModal}>

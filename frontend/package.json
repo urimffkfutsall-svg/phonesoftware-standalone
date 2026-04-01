@@ -1,10 +1,10 @@
 {
-  "name": "datapos",
+  "name": "phonesoftware",
   "version": "1.0.0",
-  "description": "DataPOS - Sistemi POS Multi-Tenant",
-  "author": "DataPOS",
+  "description": "PhoneSoftware - Mobile Repair Management",
+  "author": "PhoneSoftware",
   "private": true,
-  "main": "electron.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -72,8 +72,8 @@
     "electron:build:all": "yarn build && electron-builder --win --mac --linux"
   },
   "build": {
-    "appId": "com.datapos.app",
-    "productName": "DataPOS",
+    "appId": "com.phonesoftware.app",
+    "productName": "PhoneSoftware",
     "directories": {
       "output": "dist"
     },
@@ -124,7 +124,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "DataPOS",
+      "shortcutName": "PhoneSoftware",
       "installerHeaderIcon": "public/icon.ico",
       "installerIcon": "public/icon.ico",
       "uninstallerIcon": "public/icon.ico",
