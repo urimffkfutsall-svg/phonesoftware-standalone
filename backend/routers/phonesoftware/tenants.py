@@ -26,7 +26,7 @@ def check_super_admin(current_user: dict):
 
 @router.get("", response_model=List[PSTenantResponse])
 async def get_all_ps_tenants(request: Request):
-    # Manual token verification
+    """Get all tenants - Super Admin only"""
     auth_header = request.headers.get("Authorization", "")
     if not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Token mungon")
@@ -35,26 +35,24 @@ async def get_all_ps_tenants(request: Request):
         secret = _os.environ.get("JWT_SECRET", "phonesoftware_secret_key")
         payload = _jwt.decode(token, secret, algorithms=["HS256"])
         user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
-        user = await ps_users.find_one({"id": user_id}, {"_id": 0})
-        if not user:
-            user = await _db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
-        if not user:
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Token invalid")
+        current_user = await ps_users.find_one({"id": user_id}, {"_id": 0})
+        if not current_user:
+            current_user = await _db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
+        if not current_user:
             raise HTTPException(status_code=401, detail="User not found")
-        current_user = user
+        if current_user.get("role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Super Admin only")
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
-    check_super_admin(current_user)
-    """Get all PhoneSoftware tenants - Super Admin only"""
-    check_super_admin(current_user)
-    
+        raise HTTPException(status_code=401, detail=f"Token error: {str(e)}")
+
     tenants = await ps_tenants.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
-    
     for tenant in tenants:
         tenant["users_count"] = await ps_users.count_documents({"tenant_id": tenant["id"]})
         tenant["repairs_count"] = await ps_repairs.count_documents({"tenant_id": tenant["id"]})
-    
     return tenants
 
 
