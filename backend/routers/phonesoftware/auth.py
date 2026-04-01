@@ -469,7 +469,7 @@ async def get_ps_current_user(credentials: _HTTPCreds = Depends(_ps_bearer)):
     try:
         import jwt as pyjwt
         import database as db_module
-        secret = os.environ.get("JWT_SECRET", "phonesoftware_secret_2024")
+        secret = os.environ.get("JWT_SECRET", "phonesoftware_secret_key")
         payload = pyjwt.decode(credentials.credentials, secret, algorithms=["HS256"])
         user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
         if not user_id:
