@@ -13,6 +13,7 @@ const PSRegister = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const [error, setError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [regEmail, setRegEmail] = useState('');
@@ -63,6 +64,29 @@ const PSRegister = () => {
   }
 
   const inputClass = "w-full h-11 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00a79d] focus:border-[#00a79d] outline-none text-sm transition-all";
+
+  if (registered) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#00a79d]/10 to-white flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md text-center space-y-5">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900">Regjistrimi u krye me sukses!</h2>
+          <p className="text-gray-600">Jeni regjistruar me sukses në planin prej <strong>30 ditë falas</strong>.</p>
+          <p className="text-gray-500 text-sm">Faleminderit që zgjodhët PhoneSoftware!</p>
+          <button
+            onClick={() => navigate('/phonesoftware/login')}
+            className="w-full bg-[#00a79d] hover:bg-[#008f86] text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            Kyqu këtu →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-8 px-4">

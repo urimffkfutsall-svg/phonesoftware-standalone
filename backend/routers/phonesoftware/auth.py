@@ -228,7 +228,7 @@ async def ps_register(request: PSRegisterRequest):
         "telefoni": request.telefoni,
         "email": request.email,
         "status": "pending",
-        "email_verified": False,
+        "email_verified": True,
         "admin_verified": False,
         "created_at": datetime.now(timezone.utc).isoformat()
     })
@@ -241,7 +241,7 @@ async def ps_register(request: PSRegisterRequest):
         "phone": request.telefoni,
         "role": "admin",
         "is_active": True,
-        "email_verified": False,
+        "email_verified": True,
         "admin_verified": False,
         "verify_token": verify_token,
         "tenant_id": tenant_id,
@@ -380,7 +380,7 @@ async def ps_register(request: PSRegisterRequest):
         "telefoni": request.telefoni,
         "email": request.email,
         "status": "pending",
-        "email_verified": False,
+        "email_verified": True,
         "admin_verified": False,
         "created_at": datetime.now(timezone.utc).isoformat()
     })
@@ -393,7 +393,7 @@ async def ps_register(request: PSRegisterRequest):
         "phone": request.telefoni,
         "role": "admin",
         "is_active": True,
-        "email_verified": False,
+        "email_verified": True,
         "admin_verified": False,
         "verify_token": verify_token,
         "tenant_id": tenant_id,

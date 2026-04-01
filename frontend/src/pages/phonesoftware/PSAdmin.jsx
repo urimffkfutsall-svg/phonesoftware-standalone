@@ -119,7 +119,7 @@ const PSAdmin = () => {
 
   const loadTenants = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/phonesoftware/tenants`, {
+      const response = await axios.get(`${API_URL}/api/phonesoftware/admin/tenants`, {
         headers: getAuthHeaders()
       });
       setTenants(response.data);
@@ -260,7 +260,7 @@ const PSAdmin = () => {
         }, { headers: getAuthHeaders() });
         toast.success('Firma u përditësua me sukses!');
       } else {
-        await axios.post(`${API_URL}/api/phonesoftware/tenants`, formData, {
+        await axios.post(`${API_URL}/api/phonesoftware/admin/tenants`, formData, {
           headers: getAuthHeaders()
         });
         toast.success('Firma u krijua me sukses!');
