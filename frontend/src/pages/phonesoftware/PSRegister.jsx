@@ -53,7 +53,7 @@ const PSRegister = () => {
             <p className="text-sm text-[#00a79d] font-semibold">Email verifikimi u dergua!</p>
             <p className="text-xs text-gray-500 mt-1">Kontrolloni edhe Spam/Junk nese nuk e gjeni.</p>
           </div>
-          <button onClick={() => navigate('/phonesoftware/login')}
+          <button onClick={() => window.location.href='/#/phonesoftware/login'}
             className="w-full h-12 bg-[#00a79d] hover:bg-[#008f86] text-white font-semibold rounded-xl transition-all">
             Kthehu te Kycja
           </button>
@@ -153,7 +153,7 @@ const PSRegister = () => {
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-500">
               Keni llogari?{' '}
-              <a href="/phonesoftware/login" className="text-[#00a79d] font-semibold hover:underline">
+              <a href="/#/phonesoftware/login" className="text-[#00a79d] font-semibold hover:underline">
                 Kycuni ketu
               </a>
             </p>
