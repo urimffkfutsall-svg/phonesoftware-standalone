@@ -149,7 +149,7 @@ const PSLogin = () => {
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-500">
               Nuk keni llogari?{' '}
-              <a href="/phonesoftware/register" className="text-[#00a79d] font-semibold hover:underline">
+              <a href="/#/phonesoftware/register" className="text-[#00a79d] font-semibold hover:underline">
                 Regjistrohuni ketu
               </a>
             </p>
