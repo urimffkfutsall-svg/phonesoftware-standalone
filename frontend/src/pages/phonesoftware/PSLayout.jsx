@@ -41,12 +41,13 @@ const PSLayout = () => {
   };
 
   const navItems = [
-    { path: '/phonesoftware/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'technician', 'staff', 'worker'] },
-    { path: '/phonesoftware/repairs', icon: Wrench, label: 'Riparime', roles: ['admin', 'manager', 'technician', 'staff', 'worker'] },
-    { path: '/phonesoftware/inventory', icon: Package, label: 'Inventari', roles: ['admin', 'manager', 'staff'] },
-    { path: '/phonesoftware/customers', icon: Users, label: 'Klientët', roles: ['admin', 'manager', 'staff'] },
-    { path: '/phonesoftware/staff', icon: UserCog, label: 'Stafi', roles: ['admin', 'manager'] },
-    { path: '/phonesoftware/reports', icon: BarChart3, label: 'Raportet', roles: ['admin', 'manager'] },
+    { path: '/phonesoftware/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['super_admin', 'super_admin', 'admin', 'manager', 'technician', 'staff', 'worker'] },
+    { path: '/phonesoftware/repairs', icon: Wrench, label: 'Riparime', roles: ['super_admin', 'super_admin', 'admin', 'manager', 'technician', 'staff', 'worker'] },
+    { path: '/phonesoftware/inventory', icon: Package, label: 'Inventari', roles: ['super_admin', 'super_admin', 'admin', 'manager', 'staff'] },
+    { path: '/phonesoftware/customers', icon: Users, label: 'Klientët', roles: ['super_admin', 'super_admin', 'admin', 'manager', 'staff'] },
+    { path: '/phonesoftware/staff', icon: UserCog, label: 'Stafi', roles: ['super_admin', 'admin', 'manager'] },
+    { path: '/phonesoftware/reports', icon: BarChart3, label: 'Raportet', roles: ['super_admin', 'admin', 'manager'] },
+  { path: '/phonesoftware/admin', icon: UserCog, label: 'Super Admin', roles: ['super_admin'] },
   ];
 
   const filteredNavItems = navItems.filter(item => 

@@ -468,12 +468,16 @@ async def get_ps_current_user(credentials: _HTTPCreds = Depends(_ps_bearer)):
         raise HTTPException(status_code=401, detail="Token mungon")
     try:
         import jwt as pyjwt
+        import database as db_module
         secret = os.environ.get("JWT_SECRET", "phonesoftware_secret_2024")
         payload = pyjwt.decode(credentials.credentials, secret, algorithms=["HS256"])
         user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
         if not user_id:
             raise HTTPException(status_code=401, detail="Token invalid")
+        # Check ps_users first, then pos_users (super_admin)
         user = await ps_users.find_one({"id": user_id}, {"_id": 0})
+        if not user:
+            user = await db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
         if not user:
             raise HTTPException(status_code=401, detail="Perdoruesi nuk u gjet")
         return user
