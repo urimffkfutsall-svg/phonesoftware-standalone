@@ -220,10 +220,7 @@ async def ps_register(request: PSRegisterRequest):
         raise HTTPException(status_code=400, detail="Ky email eshte i regjistruar")
     verify_token = str(uuid.uuid4())
     tenant_id = str(uuid.uuid4())
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.insert_one({
+    await ps_tenants.insert_one({
         "id": tenant_id,
         "emri_firmes": request.emri_firmes,
         "shteti": request.shteti,
@@ -264,11 +261,8 @@ async def verify_email(token: str):
         {"verify_token": token},
         {"": {"email_verified": True, "verify_token": None}}
     )
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
     if user.get("tenant_id"):
-        await ps_tenants_col.update_one(
+        await ps_tenants.update_one(
             {"id": user["tenant_id"]},
             {"": {"email_verified": True, "status": "active"}}
         )
@@ -276,10 +270,7 @@ async def verify_email(token: str):
 
 @router.get("/admin/tenants")
 async def get_all_tenants():
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    tenants = await ps_tenants_col.find({}, {"_id": 0}).to_list(1000)
+    tenants = await ps_tenants.find({}, {"_id": 0}).to_list(1000)
     for t in tenants:
         user = await ps_users.find_one({"tenant_id": t["id"], "role": "admin"}, {"_id": 0})
         if user:
@@ -289,45 +280,30 @@ async def get_all_tenants():
 
 @router.put("/admin/tenants/{tenant_id}")
 async def update_tenant(tenant_id: str, data: dict):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": data})
+    await ps_tenants.update_one({"id": tenant_id}, {"": data})
     return {"message": "U ndryshua"}
 
 @router.delete("/admin/tenants/{tenant_id}")
 async def delete_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.delete_one({"id": tenant_id})
+    await ps_tenants.delete_one({"id": tenant_id})
     await ps_users.delete_many({"tenant_id": tenant_id})
     return {"message": "U fshi"}
 
 @router.post("/admin/tenants/{tenant_id}/verify")
 async def admin_verify_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": {"admin_verified": True, "status": "active"}})
+    await ps_tenants.update_one({"id": tenant_id}, {"": {"admin_verified": True, "status": "active"}})
     await ps_users.update_many({"tenant_id": tenant_id}, {"": {"admin_verified": True}})
     return {"message": "Firma u verifikua nga administratori"}
 
 @router.post("/admin/tenants/{tenant_id}/activate")
 async def activate_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": {"status": "active"}})
+    await ps_tenants.update_one({"id": tenant_id}, {"": {"status": "active"}})
     await ps_users.update_many({"tenant_id": tenant_id}, {"": {"is_active": True}})
     return {"message": "Firma u aktivizua"}
 
 @router.post("/admin/tenants/{tenant_id}/suspend")
 async def suspend_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": {"status": "suspended"}})
+    await ps_tenants.update_one({"id": tenant_id}, {"": {"status": "suspended"}})
     return {"message": "Firma u pezullua"}
 
 
@@ -396,10 +372,7 @@ async def ps_register(request: PSRegisterRequest):
         raise HTTPException(status_code=400, detail="Ky email eshte i regjistruar")
     verify_token = str(uuid.uuid4())
     tenant_id = str(uuid.uuid4())
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.insert_one({
+    await ps_tenants.insert_one({
         "id": tenant_id,
         "emri_firmes": request.emri_firmes,
         "shteti": request.shteti,
@@ -440,11 +413,8 @@ async def verify_email(token: str):
         {"verify_token": token},
         {"": {"email_verified": True, "verify_token": None}}
     )
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
     if user.get("tenant_id"):
-        await ps_tenants_col.update_one(
+        await ps_tenants.update_one(
             {"id": user["tenant_id"]},
             {"": {"email_verified": True, "status": "active"}}
         )
@@ -452,10 +422,7 @@ async def verify_email(token: str):
 
 @router.get("/admin/tenants")
 async def get_all_tenants():
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    tenants = await ps_tenants_col.find({}, {"_id": 0}).to_list(1000)
+    tenants = await ps_tenants.find({}, {"_id": 0}).to_list(1000)
     for t in tenants:
         user = await ps_users.find_one({"tenant_id": t["id"], "role": "admin"}, {"_id": 0})
         if user:
@@ -465,43 +432,28 @@ async def get_all_tenants():
 
 @router.put("/admin/tenants/{tenant_id}")
 async def update_tenant(tenant_id: str, data: dict):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": data})
+    await ps_tenants.update_one({"id": tenant_id}, {"": data})
     return {"message": "U ndryshua"}
 
 @router.delete("/admin/tenants/{tenant_id}")
 async def delete_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.delete_one({"id": tenant_id})
+    await ps_tenants.delete_one({"id": tenant_id})
     await ps_users.delete_many({"tenant_id": tenant_id})
     return {"message": "U fshi"}
 
 @router.post("/admin/tenants/{tenant_id}/verify")
 async def admin_verify_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": {"admin_verified": True, "status": "active"}})
+    await ps_tenants.update_one({"id": tenant_id}, {"": {"admin_verified": True, "status": "active"}})
     await ps_users.update_many({"tenant_id": tenant_id}, {"": {"admin_verified": True}})
     return {"message": "Firma u verifikua nga administratori"}
 
 @router.post("/admin/tenants/{tenant_id}/activate")
 async def activate_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": {"status": "active"}})
+    await ps_tenants.update_one({"id": tenant_id}, {"": {"status": "active"}})
     await ps_users.update_many({"tenant_id": tenant_id}, {"": {"is_active": True}})
     return {"message": "Firma u aktivizua"}
 
 @router.post("/admin/tenants/{tenant_id}/suspend")
 async def suspend_tenant(tenant_id: str):
-    from .database import get_ps_db
-    db = get_ps_db()
-    ps_tenants_col = db["ps_tenants"]
-    await ps_tenants_col.update_one({"id": tenant_id}, {"": {"status": "suspended"}})
+    await ps_tenants.update_one({"id": tenant_id}, {"": {"status": "suspended"}})
     return {"message": "Firma u pezullua"}
