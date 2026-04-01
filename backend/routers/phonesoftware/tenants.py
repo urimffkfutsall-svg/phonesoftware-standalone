@@ -24,7 +24,7 @@ def check_super_admin(current_user: dict):
         raise HTTPException(status_code=403, detail="Vetëm Super Admin ka akses")
 
 
-@router.get("", response_model=List[PSTenantResponse])
+@router.get("")
 async def get_all_ps_tenants(request: Request):
     """Get all tenants - Super Admin only"""
     auth_header = request.headers.get("Authorization", "")
