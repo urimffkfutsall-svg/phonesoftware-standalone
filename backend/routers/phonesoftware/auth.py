@@ -47,6 +47,28 @@ async def ps_login(request: PSLoginRequest):
     user = await ps_users.find_one({"username": request.username}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=401, detail="Kredencialet e gabuara")
+    if user.get("role") == "super_admin":
+        token = create_token(
+            user_id=user["id"],
+            username=user.get("username", ""),
+            role="super_admin",
+            tenant_id=None
+        )
+        created_at = user.get("created_at")
+        if isinstance(created_at, datetime):
+            created_at = created_at.isoformat()
+        return PSTokenResponse(
+            access_token=token,
+            user=PSUserResponse(
+                id=user["id"],
+                username=user["username"],
+                full_name=user.get("full_name", "Super Administrator"),
+                role=PSUserRole.SUPER_ADMIN,
+                is_active=True,
+                tenant_id=None,
+                created_at=created_at or datetime.now(timezone.utc).isoformat()
+            )
+        )
     if not user.get("is_active", True):
         raise HTTPException(status_code=401, detail="Llogaria eshte e caktivizuar")
     if user.get("role") != "super_admin":
