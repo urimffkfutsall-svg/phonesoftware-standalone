@@ -276,7 +276,7 @@ const PSAdmin = () => {
 
   const handleAdminVerify = async (tenantId) => {
   try {
-    await axios.post(${API_URL}/api/phonesoftware/auth/admin/tenants//verify, {}, {
+    await axios.post(`${API_URL}/api/phonesoftware/auth/admin/tenants/${tenantId}/verify`, {}, {
       headers: getAuthHeaders()
     });
     toast.success('Firma u verifikua nga administratori!');
@@ -288,7 +288,7 @@ const PSAdmin = () => {
 
 const handleAdminVerify = async (tenantId) => {
   try {
-    await axios.post(${API_URL}/api/phonesoftware/auth/admin/tenants//verify, {}, {
+    await axios.post(`${API_URL}/api/phonesoftware/auth/admin/tenants/${tenantId}/verify`, {}, {
       headers: getAuthHeaders()
     });
     toast.success('Firma u verifikua nga administratori!');

@@ -25,7 +25,7 @@ const PSRegister = () => {
     setLoading(true);
     setError('');
     try {
-      await axios.post(${API_URL}/api/phonesoftware/auth/register, form);
+      await axios.post(`${API_URL}/api/phonesoftware/auth/register`, form);
       setRegEmail(form.email);
       setShowSuccess(true);
     } catch (err) {
