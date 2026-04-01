@@ -23,7 +23,6 @@ import Debts from './pages/Debts';
 // PhoneSoftware Pages
 import PSLogin from './pages/phonesoftware/PSLogin';
 import PSRegister from './pages/phonesoftware/PSRegister';
-import PSRegister from './pages/phonesoftware/PSRegister';
 import PSAdmin from './pages/phonesoftware/PSAdmin';
 import PSLayout from './pages/phonesoftware/PSLayout';
 import PSDashboard from './pages/phonesoftware/PSDashboard';
@@ -481,7 +480,6 @@ const AppRoutes = () => {
 
       {/* PhoneSoftware Routes */}
       <Route path="/phonesoftware/login" element={<PSLogin />} />
-<Route path="/phonesoftware/register" element={<PSRegister />} />
 <Route path="/phonesoftware/register" element={<PSRegister />} />
       <Route path="/phonesoftware/admin" element={<PSAdmin />} />
       <Route path="/repair-status/:ticketNumber" element={<PSRepairStatus />} />
