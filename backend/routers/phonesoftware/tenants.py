@@ -13,6 +13,7 @@ from auth import hash_password
 import jwt as _jwt
 import os as _os
 import database as _db_module
+from .auth import get_ps_current_user
 
 router = APIRouter(prefix="/phonesoftware/tenants", tags=["PhoneSoftware Tenants"])
 
