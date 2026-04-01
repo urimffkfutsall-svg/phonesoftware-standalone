@@ -1,5 +1,5 @@
 """PhoneSoftware Tenant Management Routes (Super Admin only)"""
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from typing import List
 from datetime import datetime, timezone, timedelta
 import uuid
@@ -9,8 +9,10 @@ from .models import (
     PSTenantCreate, PSTenantUpdate, PSTenantResponse,
     PSUserCreate, PSUserResponse, PSUserRole, PSTenantStatus
 )
-from auth import hash_password, log_audit
-from .auth import get_ps_current_user
+from auth import hash_password
+import jwt as _jwt
+import os as _os
+import database as _db_module
 
 router = APIRouter(prefix="/phonesoftware/tenants", tags=["PhoneSoftware Tenants"])
 
@@ -22,7 +24,27 @@ def check_super_admin(current_user: dict):
 
 
 @router.get("", response_model=List[PSTenantResponse])
-async def get_all_ps_tenants(current_user: dict = Depends(get_ps_current_user)):
+async def get_all_ps_tenants(request: Request):
+    # Manual token verification
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token mungon")
+    token = auth_header.split(" ")[1]
+    try:
+        secret = _os.environ.get("JWT_SECRET", "phonesoftware_secret_key")
+        payload = _jwt.decode(token, secret, algorithms=["HS256"])
+        user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
+        user = await ps_users.find_one({"id": user_id}, {"_id": 0})
+        if not user:
+            user = await _db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+        current_user = user
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))
+    check_super_admin(current_user)
     """Get all PhoneSoftware tenants - Super Admin only"""
     check_super_admin(current_user)
     
