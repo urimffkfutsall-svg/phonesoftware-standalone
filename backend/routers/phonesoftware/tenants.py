@@ -1,261 +1,127 @@
-"""PhoneSoftware Tenant Management Routes (Super Admin only)"""
-from fastapi import APIRouter, HTTPException, Depends, Request
-from typing import List
+"""PhoneSoftware Tenant Management Routes"""
+from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime, timezone, timedelta
-import uuid
-
-from .database import ps_tenants, ps_users, ps_repairs
-from .models import (
-    PSTenantCreate, PSTenantUpdate, PSTenantResponse,
-    PSUserCreate, PSUserResponse, PSUserRole, PSTenantStatus
-)
-from auth import hash_password
+import uuid, os as _os, database as _db_module
 import jwt as _jwt
-import os as _os
-import database as _db_module
-from .auth import get_ps_current_user
+from .database import ps_tenants, ps_users, ps_repairs
+from .models import PSTenantCreate, PSTenantUpdate, PSUserCreate, PSUserRole, PSTenantStatus
+from auth import hash_password
 
 router = APIRouter(prefix="/phonesoftware/tenants", tags=["PhoneSoftware Tenants"])
 
 
-def check_super_admin(current_user: dict):
-    """Verify user is super admin"""
-    if current_user.get("role") != "super_admin":
-        raise HTTPException(status_code=403, detail="Vetëm Super Admin ka akses")
-
-
-
-async def _verify_super_admin(request: Request):
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
+async def _auth(request: Request):
+    h = request.headers.get("Authorization", "")
+    if not h.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Token mungon")
-    token = auth_header.split(" ")[1]
     try:
-        secret = _os.environ.get("JWT_SECRET", "phonesoftware_secret_key")
-        payload = _jwt.decode(token, secret, algorithms=["HS256"])
-        user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
-        if not user_id:
-            raise HTTPException(status_code=401, detail="Token invalid")
-        user = await ps_users.find_one({"id": user_id}, {"_id": 0})
-        if not user:
-            user = await _db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
-        if not user:
+        p = _jwt.decode(h.split(" ")[1], _os.environ.get("JWT_SECRET","phonesoftware_secret_key"), algorithms=["HS256"])
+        uid = p.get("sub") or p.get("user_id") or p.get("id")
+        u = await ps_users.find_one({"id": uid},{"_id":0})
+        if not u:
+            u = await _db_module.pos_users.find_one({"id": uid},{"_id":0})
+        if not u:
             raise HTTPException(status_code=401, detail="User not found")
-        if user.get("role") != "super_admin":
+        if u.get("role") != "super_admin":
             raise HTTPException(status_code=403, detail="Super Admin only")
-        return user
+        return u
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Token error: {str(e)}")
+        raise HTTPException(status_code=401, detail=str(e))
 
 
 @router.get("")
-async def get_all_ps_tenants(request: Request):
-    """Get all tenants - Super Admin only"""
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Token mungon")
-    token = auth_header.split(" ")[1]
-    try:
-        secret = _os.environ.get("JWT_SECRET", "phonesoftware_secret_key")
-        payload = _jwt.decode(token, secret, algorithms=["HS256"])
-        user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
-        if not user_id:
-            raise HTTPException(status_code=401, detail="Token invalid")
-        current_user = await ps_users.find_one({"id": user_id}, {"_id": 0})
-        if not current_user:
-            current_user = await _db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
-        if not current_user:
-            raise HTTPException(status_code=401, detail="User not found")
-        if current_user.get("role") != "super_admin":
-            raise HTTPException(status_code=403, detail="Super Admin only")
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Token error: {str(e)}")
-
-    tenants = await ps_tenants.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
-    for tenant in tenants:
-        tenant["users_count"] = await ps_users.count_documents({"tenant_id": tenant["id"]})
-        tenant["repairs_count"] = await ps_repairs.count_documents({"tenant_id": tenant["id"]})
-    return tenants
+async def get_tenants(request: Request):
+    await _auth(request)
+    ts = await ps_tenants.find({},{"_id":0}).sort("created_at",-1).to_list(1000)
+    for t in ts:
+        t["users_count"] = await ps_users.count_documents({"tenant_id":t["id"]})
+        t["repairs_count"] = await ps_repairs.count_documents({"tenant_id":t["id"]})
+    return ts
 
 
-@router.post("", response_model=PSTenantResponse)
-async def create_ps_tenant(tenant: PSTenantCreate, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Create a new PhoneSoftware tenant - Super Admin only"""
-    check_super_admin(current_user)
-    
-    # Check if name exists
-    existing = await ps_tenants.find_one({"name": tenant.name.lower()})
-    if existing:
-        raise HTTPException(status_code=400, detail="Emri i firmës ekziston tashmë")
-    
-    # Check if email exists
-    existing_email = await ps_tenants.find_one({"email": tenant.email.lower()})
-    if existing_email:
-        raise HTTPException(status_code=400, detail="Email-i ekziston tashmë")
-    
-    # Calculate subscription expiration
-    subscription_expires = datetime.now(timezone.utc) + timedelta(days=30 * tenant.subscription_months)
-    
-    tenant_id = str(uuid.uuid4())
-    tenant_data = {
-        "id": tenant_id,
-        "name": tenant.name.lower(),
-        "company_name": tenant.company_name,
-        "email": tenant.email.lower(),
-        "phone": tenant.phone,
-        "address": tenant.address,
-        "city": tenant.city,
-        "logo_url": tenant.logo_url,
-        "primary_color": tenant.primary_color,
-        "secondary_color": tenant.secondary_color,
-        "status": PSTenantStatus.TRIAL if tenant.subscription_months == 1 else PSTenantStatus.ACTIVE,
-        "subscription_expires": subscription_expires.isoformat(),
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": current_user["id"]
-    }
-    
-    await ps_tenants.insert_one(tenant_data)
-    
-    # Create admin user for this tenant
-    admin_user = {
-        "id": str(uuid.uuid4()),
-        "username": tenant.admin_username,
-        "password_hash": hash_password(tenant.admin_password),
-        "full_name": tenant.admin_full_name,
-        "role": PSUserRole.ADMIN,
-        "tenant_id": tenant_id,
-        "is_active": True,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    await ps_users.insert_one(admin_user)
-return PSTenantResponse(**tenant_data, users_count=1, repairs_count=0)
+@router.post("")
+async def create_tenant(tenant: PSTenantCreate, request: Request):
+    await _auth(request)
+    if await ps_tenants.find_one({"name":tenant.name.lower()}):
+        raise HTTPException(status_code=400, detail="Emri ekziston")
+    if await ps_tenants.find_one({"email":tenant.email.lower()}):
+        raise HTTPException(status_code=400, detail="Email ekziston")
+    months = getattr(tenant,"subscription_months",1)
+    doc = {"id":str(uuid.uuid4()),"name":tenant.name.lower(),"company_name":tenant.company_name,
+        "email":tenant.email.lower(),"phone":getattr(tenant,"phone",None),
+        "address":getattr(tenant,"address",None),"city":getattr(tenant,"city",None),
+        "logo_url":getattr(tenant,"logo_url",None),
+        "primary_color":getattr(tenant,"primary_color","#00BCD4"),
+        "secondary_color":getattr(tenant,"secondary_color","#263238"),
+        "status":PSTenantStatus.ACTIVE if months>1 else PSTenantStatus.TRIAL,
+        "subscription_expires":(datetime.now(timezone.utc)+timedelta(days=30*months)).isoformat(),
+        "created_at":datetime.now(timezone.utc).isoformat()}
+    await ps_tenants.insert_one(doc)
+    doc.pop("_id",None)
+    return doc
 
 
-@router.get("/{tenant_id}", response_model=PSTenantResponse)
-async def get_ps_tenant(tenant_id: str, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Get PhoneSoftware tenant details - Super Admin only"""
-    check_super_admin(current_user)
-    
-    tenant = await ps_tenants.find_one({"id": tenant_id}, {"_id": 0})
-    if not tenant:
+@router.get("/{tenant_id}")
+async def get_tenant(tenant_id: str, request: Request):
+    await _auth(request)
+    t = await ps_tenants.find_one({"id":tenant_id},{"_id":0})
+    if not t:
         raise HTTPException(status_code=404, detail="Firma nuk u gjet")
-    
-    tenant["users_count"] = await ps_users.count_documents({"tenant_id": tenant_id})
-    tenant["repairs_count"] = await ps_repairs.count_documents({"tenant_id": tenant_id})
-    
-    return PSTenantResponse(**tenant)
+    return t
 
 
-@router.put("/{tenant_id}", response_model=PSTenantResponse)
-async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Update PhoneSoftware tenant - Super Admin only"""
-    check_super_admin(current_user)
-    
-    existing = await ps_tenants.find_one({"id": tenant_id})
-    if not existing:
+@router.put("/{tenant_id}")
+async def update_tenant(tenant_id: str, update: PSTenantUpdate, request: Request):
+    await _auth(request)
+    if not await ps_tenants.find_one({"id":tenant_id}):
         raise HTTPException(status_code=404, detail="Firma nuk u gjet")
-    
-    update_data = {k: v for k, v in update.model_dump().items() if v is not None}
-    
-    if update_data:
-        await ps_tenants.update_one({"id": tenant_id}, {"$set": update_data})
-    
-    updated = await ps_tenants.find_one({"id": tenant_id}, {"_id": 0})
-    updated["users_count"] = await ps_users.count_documents({"tenant_id": tenant_id})
-    updated["repairs_count"] = await ps_repairs.count_documents({"tenant_id": tenant_id})
-return PSTenantResponse(**updated)
+    data = {k:v for k,v in update.dict().items() if v is not None}
+    if data:
+        await ps_tenants.update_one({"id":tenant_id},{"$set":data})
+    return await ps_tenants.find_one({"id":tenant_id},{"_id":0})
 
 
 @router.delete("/{tenant_id}")
-async def delete_ps_tenant(tenant_id: str, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Delete PhoneSoftware tenant and all data - Super Admin only"""
-    check_super_admin(current_user)
-    
-    existing = await ps_tenants.find_one({"id": tenant_id})
-    if not existing:
+async def delete_tenant(tenant_id: str, request: Request):
+    await _auth(request)
+    if not await ps_tenants.find_one({"id":tenant_id}):
         raise HTTPException(status_code=404, detail="Firma nuk u gjet")
-    
-    from .database import ps_customers, ps_inventory, ps_stock_movements, ps_sales, ps_notifications
-    
-    # Delete all tenant data
-    await ps_users.delete_many({"tenant_id": tenant_id})
-    await ps_customers.delete_many({"tenant_id": tenant_id})
-    await ps_repairs.delete_many({"tenant_id": tenant_id})
-    await ps_inventory.delete_many({"tenant_id": tenant_id})
-    await ps_stock_movements.delete_many({"tenant_id": tenant_id})
-    await ps_sales.delete_many({"tenant_id": tenant_id})
-    await ps_notifications.delete_many({"tenant_id": tenant_id})
-    await ps_tenants.delete_one({"id": tenant_id})
-return {"message": "Firma dhe të gjitha të dhënat u fshinë me sukses"}
+    await ps_tenants.delete_one({"id":tenant_id})
+    await ps_users.delete_many({"tenant_id":tenant_id})
+    await ps_repairs.delete_many({"tenant_id":tenant_id})
+    return {"message":"Firma u fshi"}
 
 
-# ============ USER MANAGEMENT ============
-@router.get("/{tenant_id}/users", response_model=List[PSUserResponse])
-async def get_ps_tenant_users(tenant_id: str, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Get all users for a PhoneSoftware tenant - Super Admin only"""
-    check_super_admin(current_user)
-    
-    users = await ps_users.find(
-        {"tenant_id": tenant_id}, 
-        {"_id": 0, "password_hash": 0}
-    ).to_list(1000)
-    
-    return users
+@router.get("/{tenant_id}/users")
+async def get_users(tenant_id: str, request: Request):
+    await _auth(request)
+    return await ps_users.find({"tenant_id":tenant_id},{"_id":0,"password_hash":0}).to_list(1000)
 
 
-@router.post("/{tenant_id}/users", response_model=PSUserResponse)
-async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Create a new user for a PhoneSoftware tenant - Super Admin only"""
-    check_super_admin(current_user)
-    
-    # Verify tenant exists
-    tenant = await ps_tenants.find_one({"id": tenant_id})
-    if not tenant:
+@router.post("/{tenant_id}/users")
+async def create_user(tenant_id: str, user_data: PSUserCreate, request: Request):
+    await _auth(request)
+    if not await ps_tenants.find_one({"id":tenant_id}):
         raise HTTPException(status_code=404, detail="Firma nuk u gjet")
-    
-    # Check if username exists in this tenant
-    existing = await ps_users.find_one({"username": user_data.username, "tenant_id": tenant_id})
-    if existing:
-        raise HTTPException(status_code=400, detail="Username ekziston tashmë në këtë firmë")
-    
-    new_user = {
-        "id": str(uuid.uuid4()),
-        "username": user_data.username,
-        "password_hash": hash_password(user_data.password),
-        "full_name": user_data.full_name,
-        "role": user_data.role,
-        "phone": user_data.phone,
-        "email": user_data.email,
-        "specialization": user_data.specialization,
-        "tenant_id": tenant_id,
-        "is_active": True,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    await ps_users.insert_one(new_user)
-# Remove password_hash before returning
-    new_user.pop("password_hash", None)
-    new_user.pop("_id", None)
-    
-    return PSUserResponse(**new_user)
+    if await ps_users.find_one({"username":user_data.username,"tenant_id":tenant_id}):
+        raise HTTPException(status_code=400, detail="Username ekziston")
+    doc = {"id":str(uuid.uuid4()),"tenant_id":tenant_id,"username":user_data.username,
+        "full_name":getattr(user_data,"full_name",user_data.username),
+        "role":getattr(user_data,"role",PSUserRole.ADMIN),
+        "password_hash":hash_password(user_data.password),"is_active":True,
+        "created_at":datetime.now(timezone.utc).isoformat()}
+    await ps_users.insert_one(doc)
+    doc.pop("_id",None)
+    doc.pop("password_hash",None)
+    return doc
 
 
 @router.delete("/{tenant_id}/users/{user_id}")
-async def delete_ps_tenant_user(tenant_id: str, user_id: str, request: Request):
-    current_user = await _verify_super_admin(request)
-    """Delete a user from a PhoneSoftware tenant - Super Admin only"""
-    check_super_admin(current_user)
-    
-    result = await ps_users.delete_one({"id": user_id, "tenant_id": tenant_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Përdoruesi nuk u gjet")
-return {"message": "Përdoruesi u fshi me sukses"}
+async def delete_user(tenant_id: str, user_id: str, request: Request):
+    await _auth(request)
+    if not await ps_users.find_one({"id":user_id,"tenant_id":tenant_id}):
+        raise HTTPException(status_code=404, detail="User nuk u gjet")
+    await ps_users.delete_one({"id":user_id,"tenant_id":tenant_id})
+    return {"message":"Perdoruesi u fshi"}
