@@ -133,10 +133,7 @@ async def create_ps_tenant(tenant: PSTenantCreate, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await ps_users.insert_one(admin_user)
-    
-    await log_audit(current_user["id"], "create", "ps_tenant", tenant_id)
-    
-    return PSTenantResponse(**tenant_data, users_count=1, repairs_count=0)
+return PSTenantResponse(**tenant_data, users_count=1, repairs_count=0)
 
 
 @router.get("/{tenant_id}", response_model=PSTenantResponse)
@@ -173,10 +170,7 @@ async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, request: Requ
     updated = await ps_tenants.find_one({"id": tenant_id}, {"_id": 0})
     updated["users_count"] = await ps_users.count_documents({"tenant_id": tenant_id})
     updated["repairs_count"] = await ps_repairs.count_documents({"tenant_id": tenant_id})
-    
-    await log_audit(current_user["id"], "update", "ps_tenant", tenant_id)
-    
-    return PSTenantResponse(**updated)
+return PSTenantResponse(**updated)
 
 
 @router.delete("/{tenant_id}")
@@ -200,10 +194,7 @@ async def delete_ps_tenant(tenant_id: str, request: Request):
     await ps_sales.delete_many({"tenant_id": tenant_id})
     await ps_notifications.delete_many({"tenant_id": tenant_id})
     await ps_tenants.delete_one({"id": tenant_id})
-    
-    await log_audit(current_user["id"], "delete", "ps_tenant", tenant_id)
-    
-    return {"message": "Firma dhe të gjitha të dhënat u fshinë me sukses"}
+return {"message": "Firma dhe të gjitha të dhënat u fshinë me sukses"}
 
 
 # ============ USER MANAGEMENT ============
@@ -251,10 +242,7 @@ async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, request
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await ps_users.insert_one(new_user)
-    
-    await log_audit(current_user["id"], "create_ps_user", "ps_user", new_user["id"], {"tenant_id": tenant_id})
-    
-    # Remove password_hash before returning
+# Remove password_hash before returning
     new_user.pop("password_hash", None)
     new_user.pop("_id", None)
     
@@ -270,7 +258,4 @@ async def delete_ps_tenant_user(tenant_id: str, user_id: str, request: Request):
     result = await ps_users.delete_one({"id": user_id, "tenant_id": tenant_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Përdoruesi nuk u gjet")
-    
-    await log_audit(current_user["id"], "delete_ps_user", "ps_user", user_id, {"tenant_id": tenant_id})
-    
-    return {"message": "Përdoruesi u fshi me sukses"}
+return {"message": "Përdoruesi u fshi me sukses"}
