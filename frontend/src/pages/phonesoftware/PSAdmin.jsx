@@ -303,6 +303,19 @@ const handleDelete = async (tenantId) => {
     }
   };
 
+  const verifyTenant = async (tenantId) => {
+    try {
+      const API_URL = process.env.REACT_APP_API_URL || '';
+      await axios.post(`${API_URL}/api/phonesoftware/auth/admin/tenants/${tenantId}/verify`, {}, {
+        headers: getAuthHeaders()
+      });
+      toast.success('Firma u verifikua me sukses!');
+      loadTenants();
+    } catch (error) {
+      toast.error('Gabim gjate verifikimit');
+    }
+  };
+
   const updateTenantStatus = async (tenantId, status) => {
     try {
       await axios.put(`${API_URL}/api/phonesoftware/tenants/${tenantId}`, { status }, {
