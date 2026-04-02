@@ -1,4 +1,7 @@
-const { app, BrowserWindow, shell } = require('electron');
+﻿import os, json
+
+# Create electron main.js
+electron_main = """const { app, BrowserWindow, shell } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
@@ -61,3 +64,40 @@ app.on('before-quit', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
+"""
+
+with open('frontend/electron.js', 'w', encoding='utf-8') as f:
+    f.write(electron_main)
+print("electron.js created!")
+
+# Update package.json
+with open('frontend/package.json', 'r', encoding='utf-8') as f:
+    pkg = json.load(f)
+
+pkg['main'] = 'electron.js'
+pkg['homepage'] = './'
+pkg['scripts']['electron'] = 'electron .'
+pkg['scripts']['electron-dev'] = 'concurrently "npm start" "wait-on http://localhost:3000 && electron ."'
+pkg['scripts']['build-electron'] = 'npm run build && electron-builder'
+pkg['build'] = {
+    "appId": "com.phonesoftware.app",
+    "productName": "PhoneSoftware",
+    "directories": {"output": "dist"},
+    "files": ["build/**/*", "electron.js", "assets/**/*"],
+    "extraResources": [{"from": "../backend-dist/", "to": "backend/"}],
+    "win": {
+        "target": "nsis",
+        "icon": "assets/icon.ico"
+    },
+    "nsis": {
+        "installerIcon": "assets/icon.ico",
+        "installerHeaderIcon": "assets/icon.ico",
+        "createDesktopShortcut": True,
+        "createStartMenuShortcut": True,
+        "shortcutName": "PhoneSoftware"
+    }
+}
+
+with open('frontend/package.json', 'w', encoding='utf-8') as f:
+    json.dump(pkg, f, indent=2)
+print("package.json updated!")

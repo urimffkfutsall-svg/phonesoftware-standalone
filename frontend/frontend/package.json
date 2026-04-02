@@ -69,66 +69,38 @@
     "electron:build:win": "yarn build && electron-builder --win",
     "electron:build:mac": "yarn build && electron-builder --mac",
     "electron:build:linux": "yarn build && electron-builder --linux",
-    "electron:build:all": "yarn build && electron-builder --win --mac --linux"
+    "electron:build:all": "yarn build && electron-builder --win --mac --linux",
+    "electron": "electron .",
+    "electron-dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build-electron": "npm run build && electron-builder"
   },
   "build": {
-    "appId": "com.datapos.app",
-    "productName": "DataPOS",
+    "appId": "com.phonesoftware.app",
+    "productName": "PhoneSoftware",
     "directories": {
       "output": "dist"
     },
     "files": [
       "build/**/*",
       "electron.js",
-      "preload.js",
-      "offline.html",
-      "package.json"
+      "assets/**/*"
     ],
     "extraResources": [
       {
-        "from": "electron.js",
-        "to": "electron.js"
+        "from": "../backend-dist/",
+        "to": "backend/"
       }
     ],
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
-      "category": "public.app-category.business"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "category": "Office"
+      "target": "nsis",
+      "icon": "assets/icon.ico"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "DataPOS",
-      "installerHeaderIcon": "public/icon.ico",
-      "installerIcon": "public/icon.ico",
-      "uninstallerIcon": "public/icon.ico",
-      "license": "LICENSE.txt"
+      "shortcutName": "PhoneSoftware"
     }
   },
   "browserslist": {
