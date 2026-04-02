@@ -1,13 +1,20 @@
-﻿# Check PSLogin href
-with open('frontend/src/pages/phonesoftware/PSLogin.jsx', 'r', encoding='utf-8') as f:
+﻿with open('backend/routers/phonesoftware/auth.py', 'r', encoding='utf-8') as f:
     c = f.read()
-idx = c.find('register')
-print('PSLogin register link:')
-print(c[idx-20:idx+60])
+c = c.replace('\r\n', '\n')
+# Find any login function
+import re
+for m in re.finditer(r'def \w*login\w*|def \w*Login\w*|email_verified|is_verified', c):
+    idx = m.start()
+    print(f"Found '{m.group()}' at {idx}:")
+    print(c[idx:idx+300])
+    print("---")
 
-# Check auth.py super_admin fix
-with open('backend/routers/phonesoftware/auth.py', 'r', encoding='utf-8') as f:
-    c = f.read()
-idx = c.find('super_admin')
-print('\nauth.py super_admin check:')
-print(c[idx-10:idx+200])
+with open('frontend/src/pages/phonesoftware/PSAdmin.jsx', 'r', encoding='utf-8') as f:
+    a = f.read()
+a = a.replace('\r\n', '\n')
+for m in re.finditer(r'delete|Delete|status|suspend|Suspend|verify|Verify', a):
+    idx = m.start()
+    print(f"Found '{m.group()}' at {idx}:")
+    print(a[idx:idx+100])
+    print("---")
+    break

@@ -72,15 +72,7 @@ async def ps_login(request: PSLoginRequest):
     if not user.get("is_active", True):
         raise HTTPException(status_code=401, detail="Llogaria eshte e caktivizuar")
     if user.get("role") != "super_admin":
-        email_verified = user.get("email_verified", False)
-        admin_verified = user.get("admin_verified", False)
-        if not email_verified and not admin_verified:
-            raise HTTPException(status_code=403, detail="Llogaria nuk eshte verifikuar. Kontrolloni emailin tuaj.")
-    if user.get("role") != "super_admin":
-        email_verified = user.get("email_verified", False)
-        admin_verified = user.get("admin_verified", False)
-        if not email_verified and not admin_verified:
-            raise HTTPException(status_code=403, detail="Llogaria nuk eshte verifikuar. Kontrolloni emailin tuaj.")
+        pass
     if not verify_password(request.password, user.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Kredencialet e gabuara")
 
