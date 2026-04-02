@@ -172,11 +172,12 @@ const PSRepairs = () => {
         accessories_received: formData.accessories_received || []
       };
 
-      // Add customer info
-      if (useManualCustomer) {
-        payload.customer_name = formData.customer_name || null;
-        payload.customer_phone = formData.customer_phone || null;
-      } else if (formData.customer_id) {
+      // Add customer info - always send name/phone
+    payload.customer_name = formData.customer_name || null;
+    payload.customer_phone = formData.customer_phone || null;
+    if (formData.customer_id) {
+      payload.customer_id = formData.customer_id;
+    } else if (formData.customer_id) {
         payload.customer_id = formData.customer_id;
         payload.customer_name = formData.customer_name || null;
         payload.customer_phone = formData.customer_phone || null;
