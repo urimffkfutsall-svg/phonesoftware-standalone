@@ -5,3 +5,24 @@ __pycache__/
 .env.local
 build/
 dist/
+
+# Build artifacts
+backend-dist/
+build-temp/
+frontend/dist/
+*.exe
+*.spec
+*.blockmap
+__pycache__/
+*.pyc
+fix_*.py
+check_*.py
+setup_*.py
+write_*.py
+decode_*.py
+add_btns*.py
+show_*.py
+find_*.py
+create_icon.py
+disable_signing.py
+rewrite_*.py
