@@ -178,7 +178,9 @@ const PSRepairs = () => {
         payload.customer_phone = formData.customer_phone || null;
       } else if (formData.customer_id) {
         payload.customer_id = formData.customer_id;
-      }
+        payload.customer_name = formData.customer_name || null;
+        payload.customer_phone = formData.customer_phone || null;
+        }
 
       const response = await axios.post(`${API_URL}/api/phonesoftware/repairs`, payload, { headers: getAuthHeaders() });
       

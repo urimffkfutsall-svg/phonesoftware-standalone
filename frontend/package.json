@@ -98,7 +98,9 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "signAndEditExecutable": false,
+      "certificateSubjectName": null
     },
     "mac": {
       "target": [
@@ -129,7 +131,8 @@
       "installerIcon": "public/icon.ico",
       "uninstallerIcon": "public/icon.ico",
       "license": "LICENSE.txt"
-    }
+    },
+    "forceCodeSigning": false
   },
   "browserslist": {
     "production": [
@@ -150,8 +153,8 @@
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
-    "electron": "^28.0.0",
-    "electron-builder": "^24.9.1",
+    "electron": "^41.1.1",
+    "electron-builder": "^24.13.3",
     "eslint": "9.23.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
