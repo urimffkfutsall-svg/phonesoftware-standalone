@@ -24,6 +24,32 @@ def check_super_admin(current_user: dict):
         raise HTTPException(status_code=403, detail="Vetëm Super Admin ka akses")
 
 
+
+async def _verify_super_admin(request: Request):
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token mungon")
+    token = auth_header.split(" ")[1]
+    try:
+        secret = _os.environ.get("JWT_SECRET", "phonesoftware_secret_key")
+        payload = _jwt.decode(token, secret, algorithms=["HS256"])
+        user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Token invalid")
+        user = await ps_users.find_one({"id": user_id}, {"_id": 0})
+        if not user:
+            user = await _db_module.pos_users.find_one({"id": user_id}, {"_id": 0})
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+        if user.get("role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Super Admin only")
+        return user
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Token error: {str(e)}")
+
+
 @router.get("")
 async def get_all_ps_tenants(request: Request):
     """Get all tenants - Super Admin only"""
@@ -57,7 +83,8 @@ async def get_all_ps_tenants(request: Request):
 
 
 @router.post("", response_model=PSTenantResponse)
-async def create_ps_tenant(tenant: PSTenantCreate, current_user: dict = Depends(get_ps_current_user)):
+async def create_ps_tenant(tenant: PSTenantCreate, request: Request):
+    current_user = await _verify_super_admin(request)
     """Create a new PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -113,7 +140,8 @@ async def create_ps_tenant(tenant: PSTenantCreate, current_user: dict = Depends(
 
 
 @router.get("/{tenant_id}", response_model=PSTenantResponse)
-async def get_ps_tenant(tenant_id: str, current_user: dict = Depends(get_ps_current_user)):
+async def get_ps_tenant(tenant_id: str, request: Request):
+    current_user = await _verify_super_admin(request)
     """Get PhoneSoftware tenant details - Super Admin only"""
     check_super_admin(current_user)
     
@@ -128,7 +156,8 @@ async def get_ps_tenant(tenant_id: str, current_user: dict = Depends(get_ps_curr
 
 
 @router.put("/{tenant_id}", response_model=PSTenantResponse)
-async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, current_user: dict = Depends(get_ps_current_user)):
+async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, request: Request):
+    current_user = await _verify_super_admin(request)
     """Update PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -151,7 +180,8 @@ async def update_ps_tenant(tenant_id: str, update: PSTenantUpdate, current_user:
 
 
 @router.delete("/{tenant_id}")
-async def delete_ps_tenant(tenant_id: str, current_user: dict = Depends(get_ps_current_user)):
+async def delete_ps_tenant(tenant_id: str, request: Request):
+    current_user = await _verify_super_admin(request)
     """Delete PhoneSoftware tenant and all data - Super Admin only"""
     check_super_admin(current_user)
     
@@ -178,7 +208,8 @@ async def delete_ps_tenant(tenant_id: str, current_user: dict = Depends(get_ps_c
 
 # ============ USER MANAGEMENT ============
 @router.get("/{tenant_id}/users", response_model=List[PSUserResponse])
-async def get_ps_tenant_users(tenant_id: str, current_user: dict = Depends(get_ps_current_user)):
+async def get_ps_tenant_users(tenant_id: str, request: Request):
+    current_user = await _verify_super_admin(request)
     """Get all users for a PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -191,7 +222,8 @@ async def get_ps_tenant_users(tenant_id: str, current_user: dict = Depends(get_p
 
 
 @router.post("/{tenant_id}/users", response_model=PSUserResponse)
-async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, current_user: dict = Depends(get_ps_current_user)):
+async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, request: Request):
+    current_user = await _verify_super_admin(request)
     """Create a new user for a PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
@@ -230,7 +262,8 @@ async def create_ps_tenant_user(tenant_id: str, user_data: PSUserCreate, current
 
 
 @router.delete("/{tenant_id}/users/{user_id}")
-async def delete_ps_tenant_user(tenant_id: str, user_id: str, current_user: dict = Depends(get_ps_current_user)):
+async def delete_ps_tenant_user(tenant_id: str, user_id: str, request: Request):
+    current_user = await _verify_super_admin(request)
     """Delete a user from a PhoneSoftware tenant - Super Admin only"""
     check_super_admin(current_user)
     
