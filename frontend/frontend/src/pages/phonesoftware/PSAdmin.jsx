@@ -69,7 +69,7 @@ const PSAdmin = () => {
     address: '',
     city: '',
     logo_url: '',
-    primary_color: '#00a79d',
+    primary_color: '#00e6b4',
     secondary_color: '#f3f4f6',
     admin_username: '',
     admin_password: '',
@@ -163,7 +163,7 @@ const PSAdmin = () => {
       address: '',
       city: '',
       logo_url: '',
-      primary_color: '#00a79d',
+      primary_color: '#00e6b4',
       secondary_color: '#f3f4f6',
       admin_username: '',
       admin_password: '',
@@ -183,7 +183,7 @@ const PSAdmin = () => {
       address: tenant.address || '',
       city: tenant.city || '',
       logo_url: tenant.logo_url || '',
-      primary_color: tenant.primary_color || '#00a79d',
+      primary_color: tenant.primary_color || '#00e6b4',
       secondary_color: tenant.secondary_color || '#f3f4f6',
       admin_username: '',
       admin_password: '',
@@ -403,22 +403,22 @@ const PSAdmin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100" data-testid="ps-admin-page">
+    <div className="min-h-screen bg-white/[0.03]" data-testid="ps-admin-page">
       {/* Header */}
-      <header className="bg-white border-b shadow-sm">
+      <header className="bg-white border-b ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#00a79d] to-[#008f86] rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#00e6b4] to-[#00b4d8] rounded-lg flex items-center justify-center">
                 <Smartphone className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">PhoneSoftware</h1>
-                <p className="text-xs text-gray-500">Panel Administrativ</p>
+                <h1 className="text-xl font-bold text-white/90">PhoneSoftware</h1>
+                <p className="text-xs text-white/40">Panel Administrativ</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-white/50">
                 Mirësevini, <strong>{user?.full_name}</strong>
               </span>
               <Button variant="outline" size="sm" onClick={handleLogout}>
@@ -434,11 +434,11 @@ const PSAdmin = () => {
         {/* Header Actions */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Menaxhimi i Firmave</h2>
-            <p className="text-gray-500">Shto, edito dhe menaxho firmat që përdorin PhoneSoftware</p>
+            <h2 className="text-2xl font-bold text-white/90">Menaxhimi i Firmave</h2>
+            <p className="text-white/40">Shto, edito dhe menaxho firmat që përdorin PhoneSoftware</p>
           </div>
           <Button 
-            className="bg-[#00a79d] hover:bg-[#008f86]"
+            className="bg-[#00e6b4] hover:bg-[#00d4a0]"
             onClick={openCreateDialog}
             data-testid="ps-add-tenant-btn"
           >
@@ -449,7 +449,7 @@ const PSAdmin = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="border-0 shadow-sm">
+          <Card className="glass-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-blue-100 rounded-lg">
@@ -457,12 +457,12 @@ const PSAdmin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{tenants.length}</p>
-                  <p className="text-sm text-gray-500">Firma Totale</p>
+                  <p className="text-sm text-white/40">Firma Totale</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm">
+          <Card className="glass-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-green-100 rounded-lg">
@@ -470,12 +470,12 @@ const PSAdmin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{tenants.filter(t => t.status === 'active').length}</p>
-                  <p className="text-sm text-gray-500">Aktive</p>
+                  <p className="text-sm text-white/40">Aktive</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm">
+          <Card className="glass-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-yellow-100 rounded-lg">
@@ -483,12 +483,12 @@ const PSAdmin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{tenants.filter(t => t.status === 'trial').length}</p>
-                  <p className="text-sm text-gray-500">Trial</p>
+                  <p className="text-sm text-white/40">Trial</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm">
+          <Card className="glass-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-purple-100 rounded-lg">
@@ -496,7 +496,7 @@ const PSAdmin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{tenants.reduce((sum, t) => sum + (t.repairs_count || 0), 0)}</p>
-                  <p className="text-sm text-gray-500">Riparime Total</p>
+                  <p className="text-sm text-white/40">Riparime Total</p>
                 </div>
               </div>
             </CardContent>
@@ -504,7 +504,7 @@ const PSAdmin = () => {
         </div>
 
         {/* Tenants List */}
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle>Lista e Firmave</CardTitle>
           </CardHeader>
@@ -516,7 +516,7 @@ const PSAdmin = () => {
             ) : tenants.length === 0 ? (
               <div className="text-center py-12">
                 <Building2 className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Ende nuk ka firma të regjistruara</p>
+                <p className="text-white/40">Ende nuk ka firma të regjistruara</p>
                 <Button className="mt-4" onClick={openCreateDialog}>
                   <Plus className="h-4 w-4 mr-2" />
                   Shto Firmën e Parë
@@ -547,8 +547,8 @@ const PSAdmin = () => {
                             <h3 className="font-semibold text-lg">{tenant.company_name}</h3>
                             {getStatusBadge(tenant.status)}
                           </div>
-                          <p className="text-sm text-gray-500">{tenant.name}.phonesoftware.com</p>
-                          <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                          <p className="text-sm text-white/40">{tenant.name}.phonesoftware.com</p>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-white/50">
                             <span className="flex items-center gap-1">
                               <Mail className="h-3 w-3" /> {tenant.email}
                             </span>
@@ -643,7 +643,7 @@ const PSAdmin = () => {
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
-              <h4 className="font-medium text-sm text-gray-500 border-b pb-2">Informacioni Bazë</h4>
+              <h4 className="font-medium text-sm text-white/40 border-b pb-2">Informacioni Bazë</h4>
               
               <div>
                 <Label>Identifikuesi (subdomain) *</Label>
@@ -653,7 +653,7 @@ const PSAdmin = () => {
                   placeholder="p.sh. mobilshopurimi"
                   disabled={editingTenant}
                 />
-                <p className="text-xs text-gray-500 mt-1">{formData.name || 'firma'}.phonesoftware.com</p>
+                <p className="text-xs text-white/40 mt-1">{formData.name || 'firma'}.phonesoftware.com</p>
               </div>
               
               <div>
@@ -705,7 +705,7 @@ const PSAdmin = () => {
             </div>
             
             <div className="space-y-4">
-              <h4 className="font-medium text-sm text-gray-500 border-b pb-2">Branding</h4>
+              <h4 className="font-medium text-sm text-white/40 border-b pb-2">Branding</h4>
               
               <div>
                 <Label>URL e Logos</Label>
@@ -756,7 +756,7 @@ const PSAdmin = () => {
               
               {!editingTenant && (
                 <>
-                  <h4 className="font-medium text-sm text-gray-500 border-b pb-2 mt-6">Admin i Firmës</h4>
+                  <h4 className="font-medium text-sm text-white/40 border-b pb-2 mt-6">Admin i Firmës</h4>
                   
                   <div>
                     <Label>Emri i Plotë i Adminit *</Label>
@@ -786,7 +786,7 @@ const PSAdmin = () => {
                     />
                   </div>
 
-                  <h4 className="font-medium text-sm text-gray-500 border-b pb-2 mt-6">Abonimi</h4>
+                  <h4 className="font-medium text-sm text-white/40 border-b pb-2 mt-6">Abonimi</h4>
                   
                   <div>
                     <Label>Kohëzgjatja e Abonimit</Label>
@@ -814,7 +814,7 @@ const PSAdmin = () => {
             <Button variant="outline" onClick={() => setShowDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleSubmit} 
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading || !formData.name || !formData.company_name || !formData.email || (!editingTenant && (!formData.admin_username || !formData.admin_password || !formData.admin_full_name))}
             >
               {loading ? 'Duke ruajtur...' : (editingTenant ? 'Ruaj Ndryshimet' : 'Krijo Firmën')}
@@ -863,7 +863,7 @@ const PSAdmin = () => {
                 />
                 <button 
                   type="button"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -908,7 +908,7 @@ const PSAdmin = () => {
                 </SelectContent>
               </Select>
               {userFormData.role === 'worker' && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-white/40 mt-1">
                   Punëtori ka akses vetëm për krijimin e riparimeve dhe ndryshimin e statusit.
                 </p>
               )}
@@ -930,7 +930,7 @@ const PSAdmin = () => {
             <Button variant="outline" onClick={() => setShowUserDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleCreateUser} 
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading || !userFormData.username || !userFormData.password || !userFormData.full_name}
             >
               {loading ? 'Duke krijuar...' : 'Krijo Përdoruesin'}
@@ -951,7 +951,7 @@ const PSAdmin = () => {
           
           <div className="space-y-3">
             {tenantUsers.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">Nuk ka përdorues</p>
+              <p className="text-center text-white/40 py-8">Nuk ka përdorues</p>
             ) : (
               tenantUsers.map((u) => (
                 <div key={u.id} className="flex items-center justify-between p-3 border rounded-lg">
@@ -959,18 +959,18 @@ const PSAdmin = () => {
                     <div className={`h-10 w-10 rounded-full flex items-center justify-center text-white font-medium ${
                       u.role === 'admin' ? 'bg-purple-500' : 
                       u.role === 'manager' ? 'bg-blue-500' : 
-                      u.role === 'technician' ? 'bg-green-500' : 'bg-gray-500'
+                      u.role === 'technician' ? 'bg-green-500' : 'bg-white/[0.02]0'
                     }`}>
                       {u.full_name?.charAt(0) || u.username?.charAt(0) || '?'}
                     </div>
                     <div>
                       <p className="font-medium">{u.full_name || u.username}</p>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <div className="flex items-center gap-2 text-sm text-white/40">
                         <span className="flex items-center gap-1">
                           <Key className="h-3 w-3" /> {u.username}
                         </span>
                         {u.specialization && (
-                          <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">{u.specialization}</span>
+                          <span className="text-xs bg-white/[0.03] px-2 py-0.5 rounded">{u.specialization}</span>
                         )}
                       </div>
                     </div>
@@ -979,7 +979,7 @@ const PSAdmin = () => {
                     <span className={`px-2 py-1 text-xs rounded ${
                       u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 
                       u.role === 'manager' ? 'bg-blue-100 text-blue-700' : 
-                      u.role === 'technician' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                      u.role === 'technician' ? 'bg-green-100 text-green-700' : 'bg-white/[0.03] text-white/70'
                     }`}>
                       {getRoleLabel(u.role)}
                     </span>
@@ -1012,7 +1012,7 @@ const PSAdmin = () => {
                 setShowUsersListDialog(false);
                 openUserDialog(selectedTenant);
               }}
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Shto Përdorues të Ri
@@ -1032,10 +1032,10 @@ const PSAdmin = () => {
           </DialogHeader>
           
           <div className="space-y-4">
-            <div className="bg-gray-50 rounded-lg p-4">
-              <p className="font-medium text-gray-900">{subscriptionData.tenant_name}</p>
+            <div className="bg-white/[0.02] rounded-lg p-4">
+              <p className="font-medium text-white/90">{subscriptionData.tenant_name}</p>
               <div className="mt-2 space-y-1 text-sm">
-                <p className="text-gray-600">
+                <p className="text-white/50">
                   Statusi aktual: 
                   <span className={`ml-2 px-2 py-0.5 rounded text-xs ${
                     subscriptionData.current_status === 'active' ? 'bg-green-100 text-green-700' :
@@ -1047,9 +1047,9 @@ const PSAdmin = () => {
                   </span>
                 </p>
                 {subscriptionData.current_expires && (
-                  <p className="text-gray-600">
+                  <p className="text-white/50">
                     Skadon: 
-                    <span className={`ml-2 font-medium ${calculateRemainingDays(subscriptionData.current_expires) <= 7 ? 'text-red-600' : 'text-gray-900'}`}>
+                    <span className={`ml-2 font-medium ${calculateRemainingDays(subscriptionData.current_expires) <= 7 ? 'text-red-600' : 'text-white/90'}`}>
                       {new Date(subscriptionData.current_expires).toLocaleDateString('sq-AL')}
                       ({calculateRemainingDays(subscriptionData.current_expires)} ditë)
                     </span>
@@ -1107,7 +1107,7 @@ const PSAdmin = () => {
                     <SelectItem value="12">12 Muaj - 200€</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-white/40 mt-2">
                   Data e re e skadimit: {(() => {
                     const baseDate = subscriptionData.current_expires 
                       ? new Date(subscriptionData.current_expires) 
@@ -1134,7 +1134,7 @@ const PSAdmin = () => {
             <Button variant="outline" onClick={() => setShowSubscriptionDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleSubscriptionUpdate}
-              className={subscriptionData.action === 'suspend' ? 'bg-red-500 hover:bg-red-600' : 'bg-[#00a79d] hover:bg-[#008f86]'}
+              className={subscriptionData.action === 'suspend' ? 'bg-red-500 hover:bg-red-600' : 'bg-[#00e6b4] hover:bg-[#00d4a0]'}
               disabled={loading}
             >
               {loading ? 'Duke përditësuar...' : 

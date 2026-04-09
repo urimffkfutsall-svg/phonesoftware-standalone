@@ -180,9 +180,9 @@ const PSStaff = () => {
       'admin': 'bg-purple-100 text-purple-700',
       'manager': 'bg-blue-100 text-blue-700',
       'technician': 'bg-green-100 text-green-700',
-      'staff': 'bg-gray-100 text-gray-700'
+      'staff': 'bg-white/[0.03] text-white/70'
     };
-    return colors[role] || 'bg-gray-100 text-gray-700';
+    return colors[role] || 'bg-white/[0.03] text-white/70';
   };
 
   const filteredStaff = staff.filter(user =>
@@ -196,11 +196,11 @@ const PSStaff = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Menaxhimi i Stafit</h1>
-          <p className="text-gray-500">Menaxhoni punonjësit dhe teknikët</p>
+          <h1 className="text-2xl font-bold text-white/90">Menaxhimi i Stafit</h1>
+          <p className="text-white/40">Menaxhoni punonjësit dhe teknikët</p>
         </div>
         <Button 
-          className="bg-[#00a79d] hover:bg-[#008f86]"
+          className="bg-[#00e6b4] hover:bg-[#00d4a0]"
           onClick={() => { resetForm(); setShowDialog(true); }}
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -210,11 +210,11 @@ const PSStaff = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Staf Total</p>
+                <p className="text-sm text-white/40">Staf Total</p>
                 <p className="text-2xl font-bold">{staff.length}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-xl">
@@ -223,11 +223,11 @@ const PSStaff = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Teknikë</p>
+                <p className="text-sm text-white/40">Teknikë</p>
                 <p className="text-2xl font-bold">{staff.filter(s => s.role === 'technician').length}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-xl">
@@ -236,11 +236,11 @@ const PSStaff = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Riparime (Muaji)</p>
+                <p className="text-sm text-white/40">Riparime (Muaji)</p>
                 <p className="text-2xl font-bold">
                   {performance?.staff_performance?.reduce((sum, s) => sum + s.completed, 0) || 0}
                 </p>
@@ -251,11 +251,11 @@ const PSStaff = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Të Ardhura (Muaji)</p>
+                <p className="text-sm text-white/40">Të Ardhura (Muaji)</p>
                 <p className="text-2xl font-bold">
                   {performance?.staff_performance?.reduce((sum, s) => sum + s.revenue, 0)?.toFixed(0) || 0}€
                 </p>
@@ -269,10 +269,10 @@ const PSStaff = () => {
       </div>
 
       {/* Search */}
-      <Card className="border-0 shadow-sm">
+      <Card className="glass-card">
         <CardContent className="pt-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/25" />
             <Input
               placeholder="Kërko sipas emrit, username-it ose specializimit..."
               value={searchTerm}
@@ -291,8 +291,8 @@ const PSStaff = () => {
           </div>
         ) : filteredStaff.length === 0 ? (
           <div className="col-span-full text-center py-12">
-            <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 mb-4">
+            <Users className="h-16 w-16 text-white/15 mx-auto mb-4" />
+            <p className="text-white/40 mb-4">
               {searchTerm ? 'Nuk u gjetën punonjës' : 'Ende nuk ka punonjës'}
             </p>
             <Button onClick={() => setShowDialog(true)}>
@@ -312,13 +312,13 @@ const PSStaff = () => {
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-medium text-lg ${
                         user.role === 'admin' ? 'bg-purple-500' :
                         user.role === 'manager' ? 'bg-blue-500' :
-                        user.role === 'technician' ? 'bg-green-500' : 'bg-gray-500'
+                        user.role === 'technician' ? 'bg-green-500' : 'bg-white/[0.02]0'
                       }`}>
                         {user.full_name?.charAt(0) || '?'}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{user.full_name}</h3>
-                        <p className="text-sm text-gray-500">@{user.username}</p>
+                        <h3 className="font-semibold text-white/90">{user.full_name}</h3>
+                        <p className="text-sm text-white/40">@{user.username}</p>
                       </div>
                     </div>
                     <span className={`px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}`}>
@@ -327,21 +327,21 @@ const PSStaff = () => {
                   </div>
                   
                   {user.specialization && (
-                    <p className="text-sm text-[#00a79d] mb-3 flex items-center gap-1">
+                    <p className="text-sm text-[#00e6b4] mb-3 flex items-center gap-1">
                       <Wrench className="h-3 w-3" />
                       {user.specialization}
                     </p>
                   )}
                   
                   {user.phone && (
-                    <p className="text-sm text-gray-500 flex items-center gap-1 mb-1">
+                    <p className="text-sm text-white/40 flex items-center gap-1 mb-1">
                       <Phone className="h-3 w-3" />
                       {user.phone}
                     </p>
                   )}
                   
                   {user.email && (
-                    <p className="text-sm text-gray-500 flex items-center gap-1 mb-3">
+                    <p className="text-sm text-white/40 flex items-center gap-1 mb-3">
                       <Mail className="h-3 w-3" />
                       {user.email}
                     </p>
@@ -349,18 +349,18 @@ const PSStaff = () => {
                   
                   {/* Performance Stats */}
                   {perf && (
-                    <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 rounded-lg mb-3">
+                    <div className="grid grid-cols-3 gap-2 p-3 bg-white/[0.02] rounded-lg mb-3">
                       <div className="text-center">
-                        <p className="text-lg font-bold text-gray-900">{perf.completed}</p>
-                        <p className="text-xs text-gray-500">Kryer</p>
+                        <p className="text-lg font-bold text-white/90">{perf.completed}</p>
+                        <p className="text-xs text-white/40">Kryer</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-lg font-bold text-gray-900">{perf.in_progress}</p>
-                        <p className="text-xs text-gray-500">Në proces</p>
+                        <p className="text-lg font-bold text-white/90">{perf.in_progress}</p>
+                        <p className="text-xs text-white/40">Në proces</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-lg font-bold text-[#00a79d]">{perf.revenue?.toFixed(0)}€</p>
-                        <p className="text-xs text-gray-500">Të ardhura</p>
+                        <p className="text-lg font-bold text-[#00e6b4]">{perf.revenue?.toFixed(0)}€</p>
+                        <p className="text-xs text-white/40">Të ardhura</p>
                       </div>
                     </div>
                   )}
@@ -396,7 +396,7 @@ const PSStaff = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <UserCog className="h-5 w-5 text-[#00a79d]" />
+              <UserCog className="h-5 w-5 text-[#00e6b4]" />
               {editingUser ? 'Edito Punonjësin' : 'Punonjës i Ri'}
             </DialogTitle>
           </DialogHeader>
@@ -432,7 +432,7 @@ const PSStaff = () => {
                 />
                 <button 
                   type="button"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/50"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -494,7 +494,7 @@ const PSStaff = () => {
             <Button variant="outline" onClick={() => setShowDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleSubmit}
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading}
             >
               {loading ? 'Duke ruajtur...' : (editingUser ? 'Ruaj Ndryshimet' : 'Krijo Punonjësin')}

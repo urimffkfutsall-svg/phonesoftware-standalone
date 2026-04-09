@@ -267,8 +267,8 @@ const PSRepairs = () => {
       case 'in_progress': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
       case 'completed': return 'bg-green-100 text-green-700 border-green-200';
       case 'cannot_repair': return 'bg-red-100 text-red-700 border-red-200';
-      case 'delivered': return 'bg-gray-100 text-gray-700 border-gray-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'delivered': return 'bg-white/[0.03] text-white/70 border-white/[0.08]';
+      default: return 'bg-white/[0.03] text-white/70 border-white/[0.08]';
     }
   };
 
@@ -284,7 +284,7 @@ const PSRepairs = () => {
   };
 
   const getDeviceIcon = (type) => {
-    return <Smartphone className="h-5 w-5 text-[#00a79d]" />;
+    return <Smartphone className="h-5 w-5 text-[#00e6b4]" />;
   };
 
   const filteredRepairs = repairs.filter(repair => {
@@ -311,14 +311,20 @@ const PSRepairs = () => {
   return (
     <div className="space-y-6" data-testid="ps-repairs">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#00a79d] to-[#008f86] rounded-2xl p-6 text-white">
+      <div className="rounded-2xl p-6 text-white relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, rgba(0, 230, 180, 0.1) 0%, rgba(0, 180, 216, 0.08) 100%)',
+          border: '1px solid rgba(0, 230, 180, 0.12)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Menaxhimi i Riparimeve</h1>
-            <p className="text-white/80 mt-1">Krijoni dhe menaxhoni riparimet e pajisjeve</p>
+            <p className="text-white/40 mt-1 text-[14px]">Krijoni dhe menaxhoni riparimet e pajisjeve</p>
           </div>
           <Button 
-            className="bg-white text-[#00a79d] hover:bg-gray-100 font-semibold shadow-lg"
+            className="font-semibold shadow-lg border-0 rounded-xl"
+            style={{ background: 'linear-gradient(135deg, #00e6b4 0%, #00b4d8 100%)', color: '#0c0f1a' }}
             onClick={() => setShowDialog(true)}
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -328,31 +334,31 @@ const PSRepairs = () => {
         
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-white/10 backdrop-blur rounded-xl p-3 text-center">
+          <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <p className="text-3xl font-bold">{repairStats.total}</p>
-            <p className="text-sm text-white/70">Total</p>
+            <p className="text-sm text-white/30">Total</p>
           </div>
-          <div className="bg-white/10 backdrop-blur rounded-xl p-3 text-center">
+          <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <p className="text-3xl font-bold">{repairStats.pending}</p>
-            <p className="text-sm text-white/70">Në Pritje</p>
+            <p className="text-sm text-white/30">Në Pritje</p>
           </div>
-          <div className="bg-white/10 backdrop-blur rounded-xl p-3 text-center">
+          <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <p className="text-3xl font-bold">{repairStats.completed}</p>
-            <p className="text-sm text-white/70">Gati</p>
+            <p className="text-sm text-white/30">Gati</p>
           </div>
-          <div className="bg-white/10 backdrop-blur rounded-xl p-3 text-center">
+          <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <p className="text-3xl font-bold">{repairStats.delivered}</p>
-            <p className="text-sm text-white/70">Dorëzuar</p>
+            <p className="text-sm text-white/30">Dorëzuar</p>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <Card className="border-0 shadow-sm">
+      <div className="glass-card">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/25" />
               <Input
                 placeholder="Kërko sipas numrit, markës, modelit, IMEI..."
                 value={searchTerm}
@@ -379,13 +385,13 @@ const PSRepairs = () => {
       </Card>
 
       {/* Repairs List */}
-      <Card className="border-0 shadow-sm bg-gray-50/50">
+      <div className="glass-card">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold text-gray-700">
+            <CardTitle className="text-[14px] font-bold text-white/70 uppercase tracking-wider">
               Lista e Punëve
             </CardTitle>
-            <span className="text-sm text-gray-500">
+            <span className="text-[12px] text-white/30">
               {filteredRepairs.length} {filteredRepairs.length === 1 ? 'punë' : 'punë'}
             </span>
           </div>
@@ -397,23 +403,23 @@ const PSRepairs = () => {
             </div>
           ) : filteredRepairs.length === 0 ? (
             <div className="text-center py-12">
-              <Wrench className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 mb-4">
+              <Wrench className="h-16 w-16 text-white/10 mx-auto mb-4" />
+              <p className="text-white/30 mb-4">
                 {searchTerm || statusFilter !== 'all' 
                   ? 'Nuk u gjetën riparime me këto kritere'
                   : 'Ende nuk ka riparime'}
               </p>
-              <Button onClick={() => setShowDialog(true)} className="bg-[#00a79d] hover:bg-[#008f86]">
+              <Button onClick={() => setShowDialog(true)} className="border-0" style={{ background: 'linear-gradient(135deg, #00e6b4 0%, #00b4d8 100%)', color: '#0c0f1a' }}>
                 <Plus className="h-4 w-4 mr-2" />
                 Krijo Riparimin e Parë
               </Button>
             </div>
           ) : (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
               {filteredRepairs.map((repair) => (
                 <div 
                   key={repair.id}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors cursor-pointer group"
                   onClick={() => openDetailDialog(repair)}
                   data-testid={`repair-card-${repair.ticket_number}`}
                 >
@@ -422,25 +428,25 @@ const PSRepairs = () => {
                     repair.status === 'completed' ? 'bg-green-500' :
                     repair.status === 'in_progress' ? 'bg-yellow-500' :
                     repair.status === 'cannot_repair' ? 'bg-red-500' :
-                    repair.status === 'delivered' ? 'bg-gray-400' :
+                    repair.status === 'delivered' ? 'bg-white/[0.02]0' :
                     'bg-blue-500'
                   }`} />
                   
                   {/* Main Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-bold text-gray-900 font-mono text-sm">{repair.ticket_number}</span>
-                      <span className={`px-2 py-0.5 text-[10px] font-semibold rounded ${getStatusColor(repair.status)}`}>
+                      <span className="font-bold text-white/80 font-mono text-sm">{repair.ticket_number}</span>
+                      <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-lg ${getStatusColor(repair.status)}`}>
                         {getStatusLabel(repair.status)}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="font-medium text-gray-800">{repair.brand || '-'} {repair.model || ''}</span>
+                      <span className="font-medium text-white/60">{repair.brand || '-'} {repair.model || ''}</span>
                       {repair.color && (
-                        <span className="text-gray-400">• {repair.color}</span>
+                        <span className="text-white/25">• {repair.color}</span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
+                    <div className="flex items-center gap-3 text-xs text-white/30 mt-0.5">
                       <span className="truncate max-w-[150px]">
                         <User className="h-3 w-3 inline mr-0.5" />
                         {repair.customer_name || 'Pa klient'}
@@ -455,12 +461,12 @@ const PSRepairs = () => {
                   {/* Right Side */}
                   <div className="flex items-center gap-3 flex-shrink-0">
                     {repair.estimated_cost > 0 && repair.total_cost === 0 && (
-                      <span className="text-xs text-gray-500">~{repair.estimated_cost.toFixed(0)}€</span>
+                      <span className="text-xs text-white/30">~{repair.estimated_cost.toFixed(0)}€</span>
                     )}
                     {repair.total_cost > 0 && (
-                      <span className="font-bold text-gray-900 text-sm">{repair.total_cost.toFixed(2)}€</span>
+                      <span className="font-bold text-white/80 text-sm">{repair.total_cost.toFixed(2)}€</span>
                     )}
-                    <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-[#00a79d] transition-colors" />
+                    <ChevronRight className="h-4 w-4 text-white/15 group-hover:text-[#00e6b4] transition-colors" />
                   </div>
                 </div>
               ))}
@@ -474,7 +480,7 @@ const PSRepairs = () => {
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Wrench className="h-5 w-5 text-[#00a79d]" />
+              <Wrench className="h-5 w-5 text-[#00e6b4]" />
               Riparim i Ri
             </DialogTitle>
           </DialogHeader>
@@ -498,7 +504,7 @@ const PSRepairs = () => {
                     }}
                     className="rounded border-gray-300"
                   />
-                  <span className="text-gray-600">Shëno manualisht</span>
+                  <span className="text-white/50">Shëno manualisht</span>
                 </label>
               </div>
               
@@ -656,7 +662,7 @@ const PSRepairs = () => {
             <Button variant="outline" onClick={() => setShowDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleCreateRepair}
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading}
             >
               {loading ? 'Duke krijuar...' : 'Krijo Riparimin'}
@@ -670,7 +676,7 @@ const PSRepairs = () => {
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-[#00a79d]" />
+              <FileText className="h-5 w-5 text-[#00e6b4]" />
               {selectedRepair?.ticket_number}
             </DialogTitle>
           </DialogHeader>
@@ -678,19 +684,19 @@ const PSRepairs = () => {
           {selectedRepair && (
             <div className="space-y-6">
               {/* Device & Customer Info */}
-              <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="grid grid-cols-2 gap-4 p-4 bg-white/[0.02] rounded-lg">
                 <div>
-                  <p className="text-xs text-gray-500">Pajisja</p>
+                  <p className="text-xs text-white/40">Pajisja</p>
                   <p className="font-medium">{selectedRepair.brand} {selectedRepair.model}</p>
-                  {selectedRepair.imei && <p className="text-xs text-gray-500">IMEI: {selectedRepair.imei}</p>}
+                  {selectedRepair.imei && <p className="text-xs text-white/40">IMEI: {selectedRepair.imei}</p>}
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Klienti</p>
+                  <p className="text-xs text-white/40">Klienti</p>
                   <p className="font-medium">{selectedRepair.customer_name || '-'}</p>
-                  <p className="text-xs text-gray-500">{selectedRepair.customer_phone}</p>
+                  <p className="text-xs text-white/40">{selectedRepair.customer_phone}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-xs text-gray-500">Problemi</p>
+                  <p className="text-xs text-white/40">Problemi</p>
                   <p className="text-sm">{selectedRepair.problem_description}</p>
                 </div>
               </div>
@@ -766,7 +772,7 @@ const PSRepairs = () => {
                 </div>
 
                 {/* Cost Summary */}
-                <div className="p-4 bg-[#00a79d]/5 rounded-lg">
+                <div className="p-4 bg-[#00e6b4]/5 rounded-lg">
                   <div className="flex justify-between text-sm">
                     <span>Kosto e Pjesëve:</span>
                     <span>{selectedRepair.parts_cost?.toFixed(2) || '0.00'}€</span>
@@ -809,7 +815,7 @@ const PSRepairs = () => {
             <Button variant="outline" onClick={() => setShowDetailDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleUpdateRepair}
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading}
             >
               {loading ? 'Duke ruajtur...' : 'Ruaj Ndryshimet'}

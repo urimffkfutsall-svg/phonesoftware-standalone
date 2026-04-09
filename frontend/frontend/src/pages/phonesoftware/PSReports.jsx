@@ -87,10 +87,10 @@ const PSReports = () => {
       'waiting_parts': 'bg-orange-500',
       'in_progress': 'bg-yellow-500',
       'completed': 'bg-green-500',
-      'delivered': 'bg-gray-500',
+      'delivered': 'bg-white/[0.02]0',
       'cancelled': 'bg-red-500'
     };
-    return colors[status] || 'bg-gray-500';
+    return colors[status] || 'bg-white/[0.02]0';
   };
 
   if (loading) {
@@ -106,8 +106,8 @@ const PSReports = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Raportet & Analitika</h1>
-          <p className="text-gray-500">Monitoroni performancën e biznesit tuaj</p>
+          <h1 className="text-2xl font-bold text-white/90">Raportet & Analitika</h1>
+          <p className="text-white/40">Monitoroni performancën e biznesit tuaj</p>
         </div>
         <div className="flex items-center gap-3">
           <Select value={period} onValueChange={setPeriod}>
@@ -127,7 +127,7 @@ const PSReports = () => {
 
       {/* Revenue Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-[#00a79d] to-[#008f86] text-white">
+        <Card className="border-0 shadow-sm bg-gradient-to-br from-[#00e6b4] to-[#00b4d8] text-white">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -139,11 +139,11 @@ const PSReports = () => {
           </CardContent>
         </Card>
         
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm">Kosto e Pjesëve</p>
+                <p className="text-white/40 text-sm">Kosto e Pjesëve</p>
                 <p className="text-2xl font-bold text-red-600">{revenueReport?.totals?.parts_cost?.toFixed(2) || '0.00'}€</p>
               </div>
               <Package className="h-8 w-8 text-red-200" />
@@ -151,11 +151,11 @@ const PSReports = () => {
           </CardContent>
         </Card>
         
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm">Fitimi Neto</p>
+                <p className="text-white/40 text-sm">Fitimi Neto</p>
                 <p className="text-2xl font-bold text-green-600">{revenueReport?.totals?.profit?.toFixed(2) || '0.00'}€</p>
               </div>
               <TrendingUp className="h-8 w-8 text-green-200" />
@@ -163,11 +163,11 @@ const PSReports = () => {
           </CardContent>
         </Card>
         
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm">Riparime</p>
+                <p className="text-white/40 text-sm">Riparime</p>
                 <p className="text-2xl font-bold">{revenueReport?.totals?.repairs_count || 0}</p>
               </div>
               <Wrench className="h-8 w-8 text-gray-200" />
@@ -178,10 +178,10 @@ const PSReports = () => {
 
       {/* Revenue Timeline */}
       {revenueReport?.timeline?.length > 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-[#00a79d]" />
+              <Activity className="h-5 w-5 text-[#00e6b4]" />
               Të Ardhurat sipas Ditëve
             </CardTitle>
           </CardHeader>
@@ -189,16 +189,16 @@ const PSReports = () => {
             <div className="space-y-3">
               {revenueReport.timeline.slice(-7).map((day) => (
                 <div key={day.date} className="flex items-center gap-4">
-                  <span className="w-24 text-sm text-gray-500">{day.date}</span>
-                  <div className="flex-1 h-8 bg-gray-100 rounded-lg overflow-hidden">
+                  <span className="w-24 text-sm text-white/40">{day.date}</span>
+                  <div className="flex-1 h-8 bg-white/[0.03] rounded-lg overflow-hidden">
                     <div 
-                      className="h-full bg-[#00a79d] rounded-lg flex items-center justify-end pr-2"
+                      className="h-full bg-[#00e6b4] rounded-lg flex items-center justify-end pr-2"
                       style={{ width: `${Math.min(100, (day.revenue / (revenueReport?.totals?.revenue || 1)) * 100 * 7)}%` }}
                     >
                       <span className="text-xs text-white font-medium">{day.revenue.toFixed(0)}€</span>
                     </div>
                   </div>
-                  <span className="w-16 text-sm text-gray-600 text-right">{day.count} rip.</span>
+                  <span className="w-16 text-sm text-white/50 text-right">{day.count} rip.</span>
                 </div>
               ))}
             </div>
@@ -208,10 +208,10 @@ const PSReports = () => {
 
       {/* Repairs Report */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <PieChart className="h-5 w-5 text-[#00a79d]" />
+              <PieChart className="h-5 w-5 text-[#00e6b4]" />
               Statusi i Riparimeve
             </CardTitle>
           </CardHeader>
@@ -224,10 +224,10 @@ const PSReports = () => {
                 return (
                   <div key={status} className="space-y-1">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">{getStatusLabel(status)}</span>
+                      <span className="text-white/50">{getStatusLabel(status)}</span>
                       <span className="font-medium">{count} ({percentage}%)</span>
                     </div>
-                    <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-3 bg-white/[0.03] rounded-full overflow-hidden">
                       <div 
                         className={`h-full rounded-full ${getStatusColor(status)}`}
                         style={{ width: `${percentage}%` }}
@@ -240,23 +240,23 @@ const PSReports = () => {
             
             {/* Summary */}
             <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t">
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <p className="text-2xl font-bold text-gray-900">{repairsReport?.summary?.total_repairs || 0}</p>
-                <p className="text-xs text-gray-500">Riparime Total</p>
+              <div className="text-center p-3 bg-white/[0.02] rounded-lg">
+                <p className="text-2xl font-bold text-white/90">{repairsReport?.summary?.total_repairs || 0}</p>
+                <p className="text-xs text-white/40">Riparime Total</p>
               </div>
               <div className="text-center p-3 bg-green-50 rounded-lg">
                 <p className="text-2xl font-bold text-green-600">{repairsReport?.summary?.completion_rate || 0}%</p>
-                <p className="text-xs text-gray-500">Shkalla e Përfundimit</p>
+                <p className="text-xs text-white/40">Shkalla e Përfundimit</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Inventory Report */}
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5 text-[#00a79d]" />
+              <Package className="h-5 w-5 text-[#00e6b4]" />
               Raporti i Inventarit
             </CardTitle>
           </CardHeader>
@@ -271,12 +271,12 @@ const PSReports = () => {
                 };
                 
                 return (
-                  <div key={category} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={category} className="flex items-center justify-between p-3 bg-white/[0.02] rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-900">{categoryLabels[category] || category}</p>
-                      <p className="text-xs text-gray-500">{data.count} artikuj • {data.quantity} copë</p>
+                      <p className="font-medium text-white/90">{categoryLabels[category] || category}</p>
+                      <p className="text-xs text-white/40">{data.count} artikuj • {data.quantity} copë</p>
                     </div>
-                    <p className="font-semibold text-[#00a79d]">{data.value?.toFixed(0) || 0}€</p>
+                    <p className="font-semibold text-[#00e6b4]">{data.value?.toFixed(0) || 0}€</p>
                   </div>
                 );
               })}
@@ -285,16 +285,16 @@ const PSReports = () => {
             {/* Summary */}
             <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t">
               <div className="text-center">
-                <p className="text-xl font-bold text-gray-900">{inventoryReport?.summary?.total_items || 0}</p>
-                <p className="text-xs text-gray-500">Artikuj</p>
+                <p className="text-xl font-bold text-white/90">{inventoryReport?.summary?.total_items || 0}</p>
+                <p className="text-xs text-white/40">Artikuj</p>
               </div>
               <div className="text-center">
-                <p className="text-xl font-bold text-[#00a79d]">{inventoryReport?.summary?.total_value?.toFixed(0) || 0}€</p>
-                <p className="text-xs text-gray-500">Vlera</p>
+                <p className="text-xl font-bold text-[#00e6b4]">{inventoryReport?.summary?.total_value?.toFixed(0) || 0}€</p>
+                <p className="text-xs text-white/40">Vlera</p>
               </div>
               <div className="text-center">
                 <p className="text-xl font-bold text-red-600">{inventoryReport?.summary?.low_stock_count || 0}</p>
-                <p className="text-xs text-gray-500">Stok i Ulët</p>
+                <p className="text-xs text-white/40">Stok i Ulët</p>
               </div>
             </div>
           </CardContent>
@@ -304,10 +304,10 @@ const PSReports = () => {
       {/* Parts Usage & Top Customers */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Parts Usage */}
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Wrench className="h-5 w-5 text-[#00a79d]" />
+              <Wrench className="h-5 w-5 text-[#00e6b4]" />
               Përdorimi i Pjesëve Rezervë
             </CardTitle>
           </CardHeader>
@@ -315,31 +315,31 @@ const PSReports = () => {
             {partsReport?.parts_breakdown?.length > 0 ? (
               <div className="space-y-3">
                 {partsReport.parts_breakdown.slice(0, 5).map((part, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 bg-white/[0.02] rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-900">{part.item_name}</p>
-                      <p className="text-xs text-gray-500">{part.usage_count} herë në {part.total_quantity} copë</p>
+                      <p className="font-medium text-white/90">{part.item_name}</p>
+                      <p className="text-xs text-white/40">{part.usage_count} herë në {part.total_quantity} copë</p>
                     </div>
-                    <p className="font-semibold text-[#00a79d]">{part.total_cost?.toFixed(2) || '0.00'}€</p>
+                    <p className="font-semibold text-[#00e6b4]">{part.total_cost?.toFixed(2) || '0.00'}€</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center text-gray-500 py-8">Nuk ka të dhëna për këtë periudhë</p>
+              <p className="text-center text-white/40 py-8">Nuk ka të dhëna për këtë periudhë</p>
             )}
             
             <div className="flex justify-between items-center mt-4 pt-4 border-t text-sm">
-              <span className="text-gray-500">Total pjesë të përdorura:</span>
+              <span className="text-white/40">Total pjesë të përdorura:</span>
               <span className="font-semibold">{partsReport?.total_parts_used || 0} copë • {partsReport?.total_parts_cost?.toFixed(2) || '0.00'}€</span>
             </div>
           </CardContent>
         </Card>
 
         {/* Top Customers */}
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-[#00a79d]" />
+              <Users className="h-5 w-5 text-[#00e6b4]" />
               Klientët Më të Mirë
             </CardTitle>
           </CardHeader>
@@ -347,7 +347,7 @@ const PSReports = () => {
             {customersReport?.top_customers?.length > 0 ? (
               <div className="space-y-3">
                 {customersReport.top_customers.slice(0, 5).map((customer, index) => (
-                  <div key={customer.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div key={customer.id} className="flex items-center gap-3 p-3 bg-white/[0.02] rounded-lg">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-medium ${
                       index === 0 ? 'bg-yellow-500' :
                       index === 1 ? 'bg-gray-400' :
@@ -356,19 +356,19 @@ const PSReports = () => {
                       {index + 1}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{customer.full_name}</p>
-                      <p className="text-xs text-gray-500">{customer.repairs_count} riparime</p>
+                      <p className="font-medium text-white/90">{customer.full_name}</p>
+                      <p className="text-xs text-white/40">{customer.repairs_count} riparime</p>
                     </div>
-                    <p className="font-semibold text-[#00a79d]">{customer.total_spent?.toFixed(2) || '0.00'}€</p>
+                    <p className="font-semibold text-[#00e6b4]">{customer.total_spent?.toFixed(2) || '0.00'}€</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center text-gray-500 py-8">Ende nuk ka klientë</p>
+              <p className="text-center text-white/40 py-8">Ende nuk ka klientë</p>
             )}
             
             <div className="flex justify-between items-center mt-4 pt-4 border-t text-sm">
-              <span className="text-gray-500">Total klientë:</span>
+              <span className="text-white/40">Total klientë:</span>
               <span className="font-semibold">{customersReport?.total_customers || 0}</span>
             </div>
           </CardContent>

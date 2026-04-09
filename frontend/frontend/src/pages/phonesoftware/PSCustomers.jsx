@@ -168,11 +168,11 @@ const PSCustomers = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Menaxhimi i Klientëve</h1>
-          <p className="text-gray-500">Krijoni dhe menaxhoni klientët tuaj</p>
+          <h1 className="text-2xl font-bold text-white/90">Menaxhimi i Klientëve</h1>
+          <p className="text-white/40">Krijoni dhe menaxhoni klientët tuaj</p>
         </div>
         <Button 
-          className="bg-[#00a79d] hover:bg-[#008f86]"
+          className="bg-[#00e6b4] hover:bg-[#00d4a0]"
           onClick={() => { resetForm(); setShowDialog(true); }}
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -181,10 +181,10 @@ const PSCustomers = () => {
       </div>
 
       {/* Search */}
-      <Card className="border-0 shadow-sm">
+      <Card className="glass-card">
         <CardContent className="pt-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/25" />
             <Input
               placeholder="Kërko sipas emrit, telefonit ose email-it..."
               value={searchTerm}
@@ -197,7 +197,7 @@ const PSCustomers = () => {
 
       {/* Customer Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-blue-100 rounded-xl">
@@ -205,12 +205,12 @@ const PSCustomers = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold">{customers.length}</p>
-                <p className="text-sm text-gray-500">Klientë Totale</p>
+                <p className="text-sm text-white/40">Klientë Totale</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-green-100 rounded-xl">
@@ -220,12 +220,12 @@ const PSCustomers = () => {
                 <p className="text-2xl font-bold">
                   {customers.reduce((sum, c) => sum + (c.total_repairs || 0), 0)}
                 </p>
-                <p className="text-sm text-gray-500">Riparime Totale</p>
+                <p className="text-sm text-white/40">Riparime Totale</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-purple-100 rounded-xl">
@@ -235,7 +235,7 @@ const PSCustomers = () => {
                 <p className="text-2xl font-bold">
                   {customers.reduce((sum, c) => sum + (c.total_purchases || 0), 0)}
                 </p>
-                <p className="text-sm text-gray-500">Blerje Totale</p>
+                <p className="text-sm text-white/40">Blerje Totale</p>
               </div>
             </div>
           </CardContent>
@@ -243,7 +243,7 @@ const PSCustomers = () => {
       </div>
 
       {/* Customers List */}
-      <Card className="border-0 shadow-sm">
+      <Card className="glass-card">
         <CardHeader>
           <CardTitle>Lista e Klientëve</CardTitle>
         </CardHeader>
@@ -254,8 +254,8 @@ const PSCustomers = () => {
             </div>
           ) : filteredCustomers.length === 0 ? (
             <div className="text-center py-12">
-              <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 mb-4">
+              <Users className="h-16 w-16 text-white/15 mx-auto mb-4" />
+              <p className="text-white/40 mb-4">
                 {searchTerm ? 'Nuk u gjetën klientë' : 'Ende nuk ka klientë'}
               </p>
               <Button onClick={() => setShowDialog(true)}>
@@ -272,12 +272,12 @@ const PSCustomers = () => {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-[#00a79d] rounded-full flex items-center justify-center text-white font-medium text-lg">
+                      <div className="w-12 h-12 bg-[#00e6b4] rounded-full flex items-center justify-center text-white font-medium text-lg">
                         {customer.full_name?.charAt(0) || '?'}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{customer.full_name}</h3>
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <h3 className="font-semibold text-white/90">{customer.full_name}</h3>
+                        <p className="text-sm text-white/40 flex items-center gap-1">
                           <Phone className="h-3 w-3" />
                           {customer.phone}
                         </p>
@@ -286,20 +286,20 @@ const PSCustomers = () => {
                   </div>
                   
                   {customer.email && (
-                    <p className="text-sm text-gray-500 flex items-center gap-1 mb-1">
+                    <p className="text-sm text-white/40 flex items-center gap-1 mb-1">
                       <Mail className="h-3 w-3" />
                       {customer.email}
                     </p>
                   )}
                   
                   {customer.address && (
-                    <p className="text-sm text-gray-500 flex items-center gap-1 mb-3">
+                    <p className="text-sm text-white/40 flex items-center gap-1 mb-3">
                       <MapPin className="h-3 w-3" />
                       {customer.address}
                     </p>
                   )}
                   
-                  <div className="flex items-center gap-4 pt-3 border-t text-sm text-gray-500">
+                  <div className="flex items-center gap-4 pt-3 border-t text-sm text-white/40">
                     <span className="flex items-center gap-1">
                       <Wrench className="h-4 w-4" />
                       {customer.total_repairs || 0} riparime
@@ -348,7 +348,7 @@ const PSCustomers = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <User className="h-5 w-5 text-[#00a79d]" />
+              <User className="h-5 w-5 text-[#00e6b4]" />
               {editingCustomer ? 'Edito Klientin' : 'Klient i Ri'}
             </DialogTitle>
           </DialogHeader>
@@ -406,7 +406,7 @@ const PSCustomers = () => {
             <Button variant="outline" onClick={() => setShowDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleSubmit}
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading}
             >
               {loading ? 'Duke ruajtur...' : (editingCustomer ? 'Ruaj Ndryshimet' : 'Krijo Klientin')}
@@ -420,7 +420,7 @@ const PSCustomers = () => {
         <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <User className="h-5 w-5 text-[#00a79d]" />
+              <User className="h-5 w-5 text-[#00e6b4]" />
               Historia e {selectedCustomer?.full_name}
             </DialogTitle>
           </DialogHeader>
@@ -428,23 +428,23 @@ const PSCustomers = () => {
           <div className="space-y-6">
             {/* Repairs History */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-white/90 mb-3 flex items-center gap-2">
                 <Wrench className="h-4 w-4" />
                 Riparimet ({customerHistory.repairs.length})
               </h3>
               {customerHistory.repairs.length === 0 ? (
-                <p className="text-gray-500 text-sm">Nuk ka riparime</p>
+                <p className="text-white/40 text-sm">Nuk ka riparime</p>
               ) : (
                 <div className="space-y-2">
                   {customerHistory.repairs.map((repair) => (
-                    <div key={repair.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={repair.id} className="flex items-center justify-between p-3 bg-white/[0.02] rounded-lg">
                       <div>
                         <p className="font-medium">{repair.ticket_number}</p>
-                        <p className="text-sm text-gray-500">{repair.brand} {repair.model}</p>
+                        <p className="text-sm text-white/40">{repair.brand} {repair.model}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">{repair.total_cost?.toFixed(2) || '0.00'}€</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-white/40">
                           {new Date(repair.created_at).toLocaleDateString('sq-AL')}
                         </p>
                       </div>
@@ -456,23 +456,23 @@ const PSCustomers = () => {
 
             {/* Purchases History */}
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-white/90 mb-3 flex items-center gap-2">
                 <ShoppingBag className="h-4 w-4" />
                 Blerjet ({customerHistory.purchases.length})
               </h3>
               {customerHistory.purchases.length === 0 ? (
-                <p className="text-gray-500 text-sm">Nuk ka blerje</p>
+                <p className="text-white/40 text-sm">Nuk ka blerje</p>
               ) : (
                 <div className="space-y-2">
                   {customerHistory.purchases.map((purchase) => (
-                    <div key={purchase.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={purchase.id} className="flex items-center justify-between p-3 bg-white/[0.02] rounded-lg">
                       <div>
                         <p className="font-medium">{purchase.sale_number}</p>
-                        <p className="text-sm text-gray-500">{purchase.items?.length || 0} artikuj</p>
+                        <p className="text-sm text-white/40">{purchase.items?.length || 0} artikuj</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">{purchase.grand_total?.toFixed(2) || '0.00'}€</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-white/40">
                           {new Date(purchase.created_at).toLocaleDateString('sq-AL')}
                         </p>
                       </div>

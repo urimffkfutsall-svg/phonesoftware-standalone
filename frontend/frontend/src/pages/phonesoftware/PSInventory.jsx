@@ -267,11 +267,11 @@ const PSInventory = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Menaxhimi i Inventarit</h1>
-          <p className="text-gray-500">Menaxhoni stokun e telefonave, aksesorëve dhe pjesëve rezervë</p>
+          <h1 className="text-2xl font-bold text-white/90">Menaxhimi i Inventarit</h1>
+          <p className="text-white/40">Menaxhoni stokun e telefonave, aksesorëve dhe pjesëve rezervë</p>
         </div>
         <Button 
-          className="bg-[#00a79d] hover:bg-[#008f86]"
+          className="bg-[#00e6b4] hover:bg-[#00d4a0]"
           onClick={() => { resetForm(); setShowDialog(true); }}
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -281,11 +281,11 @@ const PSInventory = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Artikuj Total</p>
+                <p className="text-sm text-white/40">Artikuj Total</p>
                 <p className="text-2xl font-bold">{stats?.total_items || 0}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-xl">
@@ -294,11 +294,11 @@ const PSInventory = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Vlera e Stokut</p>
+                <p className="text-sm text-white/40">Vlera e Stokut</p>
                 <p className="text-2xl font-bold">{stats?.total_value?.toFixed(0) || 0}€</p>
               </div>
               <div className="p-3 bg-green-100 rounded-xl">
@@ -307,11 +307,11 @@ const PSInventory = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Stok i Ulët</p>
+                <p className="text-sm text-white/40">Stok i Ulët</p>
                 <p className="text-2xl font-bold text-red-600">{stats?.low_stock_count || 0}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-xl">
@@ -320,11 +320,11 @@ const PSInventory = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="glass-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Pjesë Rezervë</p>
+                <p className="text-sm text-white/40">Pjesë Rezervë</p>
                 <p className="text-2xl font-bold">{stats?.category_counts?.spare_part || 0}</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-xl">
@@ -336,11 +336,11 @@ const PSInventory = () => {
       </div>
 
       {/* Filters */}
-      <Card className="border-0 shadow-sm">
+      <Card className="glass-card">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/25" />
               <Input
                 placeholder="Kërko sipas emrit, markës, barkodit..."
                 value={searchTerm}
@@ -383,7 +383,7 @@ const PSInventory = () => {
       )}
 
       {/* Inventory Table */}
-      <Card className="border-0 shadow-sm">
+      <Card className="glass-card">
         <CardContent className="p-0">
           {loading ? (
             <div className="flex justify-center py-12">
@@ -391,8 +391,8 @@ const PSInventory = () => {
             </div>
           ) : filteredItems.length === 0 ? (
             <div className="text-center py-12">
-              <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 mb-4">
+              <Package className="h-16 w-16 text-white/15 mx-auto mb-4" />
+              <p className="text-white/40 mb-4">
                 {searchTerm || categoryFilter !== 'all' 
                   ? 'Nuk u gjetën artikuj me këto kritere'
                   : 'Ende nuk ka artikuj në inventar'}
@@ -405,29 +405,29 @@ const PSInventory = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-white/[0.02] border-b">
                   <tr>
-                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">Artikulli</th>
-                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">Kategoria</th>
-                    <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">Blerje</th>
-                    <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">Shitje</th>
-                    <th className="text-center px-4 py-3 text-sm font-medium text-gray-600">Stoku</th>
-                    <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">Veprime</th>
+                    <th className="text-left px-4 py-3 text-sm font-medium text-white/50">Artikulli</th>
+                    <th className="text-left px-4 py-3 text-sm font-medium text-white/50">Kategoria</th>
+                    <th className="text-right px-4 py-3 text-sm font-medium text-white/50">Blerje</th>
+                    <th className="text-right px-4 py-3 text-sm font-medium text-white/50">Shitje</th>
+                    <th className="text-center px-4 py-3 text-sm font-medium text-white/50">Stoku</th>
+                    <th className="text-right px-4 py-3 text-sm font-medium text-white/50">Veprime</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
                   {filteredItems.map((item) => (
-                    <tr key={item.id} className="hover:bg-gray-50">
+                    <tr key={item.id} className="hover:bg-white/[0.02]">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            item.is_low_stock ? 'bg-red-100 text-red-600' : 'bg-[#00a79d]/10 text-[#00a79d]'
+                            item.is_low_stock ? 'bg-red-100 text-red-600' : 'bg-[#00e6b4]/10 text-[#00e6b4]'
                           }`}>
                             {getCategoryIcon(item.category)}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{item.name}</p>
-                            <p className="text-xs text-gray-500">
+                            <p className="font-medium text-white/90">{item.name}</p>
+                            <p className="text-xs text-white/40">
                               {item.brand} {item.model}
                               {item.barcode && <span className="ml-2">• {item.barcode}</span>}
                             </p>
@@ -435,16 +435,16 @@ const PSInventory = () => {
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-sm text-gray-600">{getCategoryLabel(item.category)}</span>
+                        <span className="text-sm text-white/50">{getCategoryLabel(item.category)}</span>
                         {item.condition && (
-                          <p className="text-xs text-gray-400">{getConditionLabel(item.condition)}</p>
+                          <p className="text-xs text-white/25">{getConditionLabel(item.condition)}</p>
                         )}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <span className="text-sm text-gray-600">{item.purchase_price.toFixed(2)}€</span>
+                        <span className="text-sm text-white/50">{item.purchase_price.toFixed(2)}€</span>
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <span className="text-sm font-medium text-gray-900">{item.sale_price.toFixed(2)}€</span>
+                        <span className="text-sm font-medium text-white/90">{item.sale_price.toFixed(2)}€</span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span className={`px-2 py-1 text-sm rounded-full ${
@@ -491,7 +491,7 @@ const PSInventory = () => {
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5 text-[#00a79d]" />
+              <Package className="h-5 w-5 text-[#00e6b4]" />
               {editingItem ? 'Edito Artikullin' : 'Artikull i Ri'}
             </DialogTitle>
           </DialogHeader>
@@ -684,7 +684,7 @@ const PSInventory = () => {
                     onChange={(e) => setFormData({...formData, min_stock: parseInt(e.target.value) || 0})}
                     min="0"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Alert kur stoku bie nën këtë vlerë</p>
+                  <p className="text-xs text-white/40 mt-1">Alert kur stoku bie nën këtë vlerë</p>
                 </div>
               </div>
               
@@ -703,7 +703,7 @@ const PSInventory = () => {
             <Button variant="outline" onClick={() => setShowDialog(false)}>Anulo</Button>
             <Button 
               onClick={handleSubmit}
-              className="bg-[#00a79d] hover:bg-[#008f86]"
+              className="bg-[#00e6b4] hover:bg-[#00d4a0]"
               disabled={loading}
             >
               {loading ? 'Duke ruajtur...' : (editingItem ? 'Ruaj Ndryshimet' : 'Shto Artikullin')}

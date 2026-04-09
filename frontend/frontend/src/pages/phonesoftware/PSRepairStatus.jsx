@@ -81,8 +81,8 @@ const PSRepairStatus = () => {
       case 'in_progress': return { bg: 'bg-yellow-500', light: 'bg-yellow-100', text: 'text-yellow-700' };
       case 'completed': return { bg: 'bg-green-500', light: 'bg-green-100', text: 'text-green-700' };
       case 'cannot_repair': return { bg: 'bg-red-500', light: 'bg-red-100', text: 'text-red-700' };
-      case 'delivered': return { bg: 'bg-gray-500', light: 'bg-gray-100', text: 'text-gray-700' };
-      default: return { bg: 'bg-gray-500', light: 'bg-gray-100', text: 'text-gray-700' };
+      case 'delivered': return { bg: 'bg-white/[0.02]0', light: 'bg-white/[0.03]', text: 'text-white/70' };
+      default: return { bg: 'bg-white/[0.02]0', light: 'bg-white/[0.03]', text: 'text-white/70' };
     }
   };
 
@@ -100,7 +100,7 @@ const PSRepairStatus = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="spinner" />
       </div>
     );
@@ -108,15 +108,15 @@ const PSRepairStatus = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="max-w-md w-full border-0 shadow-lg">
           <CardContent className="pt-8 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="h-8 w-8 text-red-500" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Riparimi nuk u gjet</h1>
-            <p className="text-gray-500">Numri i tiketës: <span className="font-mono">{ticketNumber}</span></p>
-            <p className="text-sm text-gray-400 mt-4">
+            <h1 className="text-xl font-bold text-white/90 mb-2">Riparimi nuk u gjet</h1>
+            <p className="text-white/40">Numri i tiketës: <span className="font-mono">{ticketNumber}</span></p>
+            <p className="text-sm text-white/25 mt-4">
               Sigurohuni që keni skanuar QR kodin e saktë ose kontaktoni servisin.
             </p>
           </CardContent>
@@ -127,10 +127,10 @@ const PSRepairStatus = () => {
 
   const colors = getStatusColor(repair.status);
   const currentStep = getCurrentStepIndex(repair.status);
-  const shopColor = repair.shop?.color || '#00a79d';
+  const shopColor = repair.shop?.color || '#00e6b4';
 
   return (
-    <div className="min-h-screen bg-gray-100" data-testid="repair-status-page">
+    <div className="min-h-screen" style={{background: "#0c0f1a"}} data-testid="repair-status-page">
       {/* Header */}
       <div 
         className="py-6 px-4"
@@ -177,14 +177,14 @@ const PSRepairStatus = () => {
           <CardContent className="p-6">
             {/* Device Info */}
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Pajisja</h3>
+              <h3 className="text-sm font-medium text-white/40 mb-2">Pajisja</h3>
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 ${colors.light} rounded-lg flex items-center justify-center`}>
                   <Smartphone className={`h-6 w-6 ${colors.text}`} />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold text-gray-900">{repair.device}</p>
-                  <div className="flex flex-wrap gap-x-3 text-sm text-gray-500">
+                  <p className="font-semibold text-white/90">{repair.device}</p>
+                  <div className="flex flex-wrap gap-x-3 text-sm text-white/40">
                     {repair.color && <span>Ngjyra: {repair.color}</span>}
                     {repair.imei && <span className="font-mono text-xs">IMEI: {repair.imei}</span>}
                   </div>
@@ -203,17 +203,17 @@ const PSRepairStatus = () => {
 
             {/* Problem */}
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Problemi</h3>
-              <p className="text-gray-700 text-sm bg-gray-50 p-3 rounded-lg">{repair.problem}</p>
+              <h3 className="text-sm font-medium text-white/40 mb-2">Problemi</h3>
+              <p className="text-white/70 text-sm bg-white/[0.02] p-3 rounded-lg">{repair.problem}</p>
             </div>
 
             {/* Accessories Received */}
             {repair.accessories_received && repair.accessories_received.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Aksesore të Pranuar</h3>
+                <h3 className="text-sm font-medium text-white/40 mb-2">Aksesore të Pranuar</h3>
                 <div className="flex flex-wrap gap-2">
                   {repair.accessories_received.map((acc, idx) => (
-                    <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
+                    <span key={idx} className="px-2 py-1 bg-white/[0.03] text-white/50 text-xs rounded">
                       {acc}
                     </span>
                   ))}
@@ -224,7 +224,7 @@ const PSRepairStatus = () => {
             {/* Status Timeline */}
             {repair.status !== 'cannot_repair' && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-4">Progresi</h3>
+                <h3 className="text-sm font-medium text-white/40 mb-4">Progresi</h3>
                 <div className="relative">
                   <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
                   {statusSteps.map((step, index) => {
@@ -235,9 +235,9 @@ const PSRepairStatus = () => {
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
                           isCompleted ? colors.bg : 'bg-gray-200'
                         }`}>
-                          <step.icon className={`h-4 w-4 ${isCompleted ? 'text-white' : 'text-gray-400'}`} />
+                          <step.icon className={`h-4 w-4 ${isCompleted ? 'text-white' : 'text-white/25'}`} />
                         </div>
-                        <span className={`ml-4 text-sm ${isCurrent ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
+                        <span className={`ml-4 text-sm ${isCurrent ? 'font-semibold text-white/90' : 'text-white/40'}`}>
                           {step.label}
                         </span>
                         {isCurrent && (
@@ -267,12 +267,12 @@ const PSRepairStatus = () => {
 
             {/* Cost Info */}
             {(repair.estimated_cost || repair.total_cost) && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="mb-6 p-4 bg-white/[0.02] rounded-lg">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">
+                  <span className="text-white/50">
                     {repair.total_cost ? 'Kosto Totale:' : 'Kosto e Vlerësuar:'}
                   </span>
-                  <span className="font-bold text-lg text-gray-900">
+                  <span className="font-bold text-lg text-white/90">
                     {(repair.total_cost || repair.estimated_cost)?.toFixed(2)}€
                   </span>
                 </div>
@@ -294,14 +294,14 @@ const PSRepairStatus = () => {
 
             {/* Dates */}
             <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-gray-500">
+              <div className="flex items-center gap-2 text-white/40">
                 <Calendar className="h-4 w-4" />
                 <span>Pranuar: {new Date(repair.created_at).toLocaleDateString('sq-AL', { 
                   day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' 
                 })}</span>
               </div>
               {repair.completed_at && (
-                <div className="flex items-center gap-2 text-gray-500">
+                <div className="flex items-center gap-2 text-white/40">
                   <CheckCircle className="h-4 w-4" />
                   <span>Përfunduar: {new Date(repair.completed_at).toLocaleDateString('sq-AL', {
                     day: '2-digit', month: 'long', year: 'numeric'
@@ -309,7 +309,7 @@ const PSRepairStatus = () => {
                 </div>
               )}
               {repair.delivered_at && (
-                <div className="flex items-center gap-2 text-gray-500">
+                <div className="flex items-center gap-2 text-white/40">
                   <Truck className="h-4 w-4" />
                   <span>Dorëzuar: {new Date(repair.delivered_at).toLocaleDateString('sq-AL', {
                     day: '2-digit', month: 'long', year: 'numeric'
@@ -323,19 +323,19 @@ const PSRepairStatus = () => {
         {/* Shop Contact Card */}
         <Card className="border-0 shadow-sm mt-4">
           <CardContent className="p-4">
-            <h3 className="font-medium text-gray-900 mb-3">{repair.shop?.name}</h3>
+            <h3 className="font-medium text-white/90 mb-3">{repair.shop?.name}</h3>
             <div className="space-y-2 text-sm">
               {repair.shop?.phone && (
                 <a 
                   href={`tel:${repair.shop.phone}`}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  className="flex items-center gap-2 text-white/50 hover:text-white/90"
                 >
                   <Phone className="h-4 w-4" />
                   {repair.shop.phone}
                 </a>
               )}
               {repair.shop?.address && (
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-white/50">
                   <MapPin className="h-4 w-4" />
                   {repair.shop.address}
                 </div>
@@ -345,7 +345,7 @@ const PSRepairStatus = () => {
         </Card>
 
         {/* Auto-refresh Info */}
-        <div className="flex items-center justify-center gap-2 mt-4 text-xs text-gray-400">
+        <div className="flex items-center justify-center gap-2 mt-4 text-xs text-white/25">
           <RefreshCw className="h-3 w-3" />
           <span>
             {lastUpdated && `Përditësuar: ${lastUpdated.toLocaleTimeString('sq-AL')}`}
@@ -360,7 +360,7 @@ const PSRepairStatus = () => {
             size="sm"
             onClick={handleRefresh}
             disabled={refreshing}
-            className="text-gray-600"
+            className="text-white/50"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
             {refreshing ? 'Duke rifreskuar...' : 'Rifresko Statusin'}
@@ -368,7 +368,7 @@ const PSRepairStatus = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-6 pb-4">
+        <p className="text-center text-xs text-white/25 mt-6 pb-4">
           Fuqizuar nga PhoneSoftware
         </p>
       </div>

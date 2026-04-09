@@ -7,13 +7,13 @@ import {
   Users,
   UserCog,
   BarChart3,
-  Settings,
   LogOut,
   Menu,
   X,
   Smartphone,
-  ChevronDown,
-  Bell
+  Bell,
+  ChevronLeft,
+  Search
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -53,77 +53,104 @@ const PSLayout = () => {
     item.roles.includes(user?.role)
   );
 
+  const currentPage = filteredNavItems.find(item => location.pathname === item.path)?.label || 'PhoneSoftware';
+
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0c0f1a' }}>
         <div className="spinner" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex" data-testid="ps-layout">
+    <div className="min-h-screen flex" style={{ background: '#0c0f1a' }} data-testid="ps-layout">
       {/* Sidebar - Desktop */}
-      <aside className={`hidden lg:flex flex-col ${sidebarOpen ? 'w-64' : 'w-20'} bg-white border-r transition-all duration-300`}>
+      <aside className={`hidden lg:flex flex-col ${sidebarOpen ? 'w-[260px]' : 'w-[76px]'} transition-all duration-300 ease-in-out`}
+        style={{
+          background: 'linear-gradient(180deg, rgba(15,19,35,0.98) 0%, rgba(10,13,28,0.99) 100%)',
+          borderRight: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b">
+        <div className="h-[70px] flex items-center justify-between px-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#00a79d] to-[#008f86] rounded-lg flex items-center justify-center">
-              <Smartphone className="h-6 w-6 text-white" />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #00e6b4 0%, #00b4d8 100%)' }}
+            >
+              <Smartphone className="h-5 w-5 text-[#0c0f1a]" />
             </div>
             {sidebarOpen && (
-              <div>
-                <h1 className="font-bold text-gray-900">PhoneSoftware</h1>
-                <p className="text-xs text-gray-500 truncate max-w-[120px]">{user?.tenant_id ? 'Tenant' : 'Admin'}</p>
+              <div className="overflow-hidden">
+                <h1 className="font-bold text-white text-[15px] leading-tight">PhoneSoftware</h1>
+                <p className="text-[11px] text-white/40">Repair Management</p>
               </div>
             )}
           </div>
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1 hover:bg-gray-100 rounded"
+            className="p-1.5 rounded-lg hover:bg-white/5 transition-colors"
           >
-            <Menu className="h-5 w-5 text-gray-500" />
+            <ChevronLeft className={`h-4 w-4 text-white/40 transition-transform ${!sidebarOpen ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4">
+        <nav className="flex-1 py-3 px-2 space-y-1">
+          {sidebarOpen && (
+            <p className="text-[10px] font-semibold text-white/25 uppercase tracking-widest px-3 mb-2">Menu</p>
+          )}
           {filteredNavItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition-all ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative ${
                   isActive
-                    ? 'bg-[#00a79d]/10 text-[#00a79d] font-medium'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'text-[#00e6b4]'
+                    : 'text-white/50 hover:text-white/80 hover:bg-white/[0.03]'
                 }`
               }
+              style={({ isActive }) => isActive ? {
+                background: 'rgba(0, 230, 180, 0.08)',
+                boxShadow: 'inset 0 0 0 1px rgba(0, 230, 180, 0.12)',
+              } : {}}
             >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              {sidebarOpen && <span>{item.label}</span>}
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-[#00e6b4]" />
+                  )}
+                  <item.icon className="h-[18px] w-[18px] flex-shrink-0" />
+                  {sidebarOpen && <span className="text-[13px] font-medium">{item.label}</span>}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
 
         {/* User Info & Logout */}
-        <div className="border-t p-4">
-          <div className={`flex items-center ${sidebarOpen ? 'gap-3' : 'justify-center'}`}>
-            <div className="w-10 h-10 bg-[#00a79d] rounded-full flex items-center justify-center text-white font-medium">
+        <div className="p-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className={`flex items-center ${sidebarOpen ? 'gap-3' : 'justify-center'} p-2 rounded-xl`}
+            style={{ background: 'rgba(255,255,255,0.03)' }}
+          >
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center text-[13px] font-bold flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #00e6b4 0%, #00b4d8 100%)', color: '#0c0f1a' }}
+            >
               {user?.full_name?.charAt(0) || 'U'}
             </div>
             {sidebarOpen && (
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-gray-900 truncate">{user?.full_name}</p>
-                <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                <p className="font-semibold text-white/90 text-[13px] truncate">{user?.full_name}</p>
+                <p className="text-[11px] text-white/30 capitalize">{user?.role}</p>
               </div>
             )}
           </div>
           <button
             onClick={handleLogout}
-            className={`mt-3 flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors ${sidebarOpen ? 'w-full' : 'justify-center'}`}
+            className={`mt-2 flex items-center gap-2 text-white/30 hover:text-red-400 transition-colors w-full px-2 py-2 rounded-lg hover:bg-red-500/5 text-[13px] ${!sidebarOpen ? 'justify-center' : ''}`}
           >
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-4 w-4" />
             {sidebarOpen && <span>Dilni</span>}
           </button>
         </div>
@@ -132,42 +159,49 @@ const PSLayout = () => {
       {/* Mobile Sidebar */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-white">
-            <div className="h-16 flex items-center justify-between px-4 border-b">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
+          <aside className="absolute left-0 top-0 bottom-0 w-[280px]"
+            style={{
+              background: 'linear-gradient(180deg, #0f1323 0%, #0a0d1c 100%)',
+              borderRight: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
+            <div className="h-[70px] flex items-center justify-between px-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#00a79d] to-[#008f86] rounded-lg flex items-center justify-center">
-                  <Smartphone className="h-6 w-6 text-white" />
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, #00e6b4 0%, #00b4d8 100%)' }}
+                >
+                  <Smartphone className="h-5 w-5 text-[#0c0f1a]" />
                 </div>
-                <span className="font-bold text-gray-900">PhoneSoftware</span>
+                <span className="font-bold text-white text-[15px]">PhoneSoftware</span>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)}>
-                <X className="h-6 w-6 text-gray-500" />
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-lg hover:bg-white/5">
+                <X className="h-5 w-5 text-white/50" />
               </button>
             </div>
-            <nav className="py-4">
+            <nav className="py-3 px-2 space-y-1">
               {filteredNavItems.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition-all ${
+                    `flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
                       isActive
-                        ? 'bg-[#00a79d]/10 text-[#00a79d] font-medium'
-                        : 'text-gray-600 hover:bg-gray-100'
+                        ? 'text-[#00e6b4] bg-[#00e6b4]/10'
+                        : 'text-white/50 hover:text-white/80 hover:bg-white/[0.03]'
                     }`
                   }
                 >
                   <item.icon className="h-5 w-5" />
-                  <span>{item.label}</span>
+                  <span className="text-[14px] font-medium">{item.label}</span>
                 </NavLink>
               ))}
             </nav>
-            <div className="absolute bottom-0 left-0 right-0 border-t p-4">
+            <div className="absolute bottom-0 left-0 right-0 p-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-gray-600 hover:text-red-500 w-full"
+                className="flex items-center gap-2 text-white/30 hover:text-red-400 w-full px-3 py-2.5 rounded-lg hover:bg-red-500/5"
               >
                 <LogOut className="h-5 w-5" />
                 <span>Dilni</span>
@@ -178,29 +212,41 @@ const PSLayout = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
         {/* Top Header */}
-        <header className="h-16 bg-white border-b flex items-center justify-between px-4 lg:px-6">
+        <header className="h-[70px] flex items-center justify-between px-4 lg:px-6 flex-shrink-0"
+          style={{
+            background: 'rgba(12, 15, 26, 0.8)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+          }}
+        >
           <div className="flex items-center gap-4">
             <button 
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+              className="lg:hidden p-2 hover:bg-white/5 rounded-xl transition-colors"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <Menu className="h-6 w-6 text-gray-600" />
+              <Menu className="h-5 w-5 text-white/60" />
             </button>
-            <h2 className="text-lg font-semibold text-gray-900">
-              {filteredNavItems.find(item => location.pathname === item.path)?.label || 'PhoneSoftware'}
-            </h2>
+            <div>
+              <h2 className="text-lg font-bold text-white">{currentPage}</h2>
+            </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <button className="p-2 hover:bg-gray-100 rounded-lg relative">
-              <Bell className="h-5 w-5 text-gray-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+          <div className="flex items-center gap-2">
+            <button className="p-2.5 hover:bg-white/5 rounded-xl transition-colors relative">
+              <Bell className="h-[18px] w-[18px] text-white/40" />
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00e6b4] rounded-full" />
             </button>
-            <div className="hidden md:flex items-center gap-2 text-sm text-gray-600">
-              <span>{user?.full_name}</span>
-              <ChevronDown className="h-4 w-4" />
+            <div className="hidden md:flex items-center gap-2 ml-2 px-3 py-2 rounded-xl"
+              style={{ background: 'rgba(255,255,255,0.03)' }}
+            >
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold"
+                style={{ background: 'linear-gradient(135deg, #00e6b4 0%, #00b4d8 100%)', color: '#0c0f1a' }}
+              >
+                {user?.full_name?.charAt(0) || 'U'}
+              </div>
+              <span className="text-[13px] text-white/60 font-medium">{user?.full_name}</span>
             </div>
           </div>
         </header>
